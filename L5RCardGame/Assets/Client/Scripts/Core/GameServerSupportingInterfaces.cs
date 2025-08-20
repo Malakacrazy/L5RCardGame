@@ -5,7 +5,7 @@ using System.Security.Claims;
 using Mirror;
 using MessagePack;
 
-namespace UnityCardGame.Server
+namespace L5RGame.Server
 {
     // =============================================================================
     // CORE INTERFACES

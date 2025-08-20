@@ -15,7 +15,7 @@ using System.Runtime.CompilerServices;
 using Mirror;
 using MessagePack;
 
-namespace UnityCardGame.Server.Debugging
+namespace L5RGame.Server.Debugging
 {
     /// <summary>
     /// Comprehensive game state inspection and debugging system for Unity Card Game Server

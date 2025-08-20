@@ -20,7 +20,7 @@ using System.Text;
 using MessagePack;
 using Prometheus;
 
-namespace UnityCardGame.Server
+namespace L5RGame.Server
 {
     /// <summary>
     /// Mirror-based authoritative game server for Unity mobile card game
