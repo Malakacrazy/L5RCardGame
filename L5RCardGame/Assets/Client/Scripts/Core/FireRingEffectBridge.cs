@@ -21,49 +21,49 @@ namespace L5RGame.Cards.Abilities
     public class FireRingEffectBridge : FireRingEffect
     {
         #region Fields
-        
+
         [Header("Python Integration")]
         [SerializeField] private bool preferPythonImplementation = true;
         [SerializeField] private bool fallbackToCSharp = true;
         [SerializeField] private string pythonScriptName = "fire_ring_effect";
-        
+
         [Header("AI Integration")]
         [SerializeField] private bool enableAIRecommendations = true;
         [SerializeField] private bool showStrategicValues = true;
         [SerializeField] private float autoExecuteThreshold = 8.0f;
         [SerializeField] private bool highlightRecommendedTargets = true;
-        
+
         [Header("Advanced Features")]
         [SerializeField] private bool enableTargetPreview = true;
         [SerializeField] private bool logDetailedAnalytics = true;
         [SerializeField] private bool enableSmartDefaults = true;
-        
+
         private bool pythonScriptLoaded = false;
         private bool pythonExecutionFailed = false;
         private AIRecommendation currentRecommendation;
-        
+
         #endregion
-        
+
         #region Constructor
-        
+
         public FireRingEffectBridge() : this(true) { }
-        
+
         public FireRingEffectBridge(bool optional) : base(optional)
         {
             // Initialize Python integration if available
             InitializePythonIntegration();
         }
-        
+
         #endregion
-        
+
         #region BaseAbility Override
-        
+
         public override void Initialize(BaseCard sourceCard, Game gameInstance)
         {
             base.Initialize(sourceCard, gameInstance);
             InitializePythonIntegration();
         }
-        
+
         public override bool CanExecute(AbilityContext context)
         {
             // Try Python implementation first
@@ -78,11 +78,11 @@ namespace L5RGame.Cards.Abilities
                     HandlePythonError("CanExecute", e);
                 }
             }
-            
+
             // Fallback to C# implementation
             return base.CanExecute(context);
         }
-        
+
         public override void ExecuteAbility(AbilityContext context)
         {
             // Generate AI recommendation if enabled
@@ -90,7 +90,7 @@ namespace L5RGame.Cards.Abilities
             {
                 GenerateAIRecommendation(context);
             }
-            
+
             // Try Python implementation first
             if (ShouldUsePythonImplementation())
             {
@@ -104,15 +104,15 @@ namespace L5RGame.Cards.Abilities
                     HandlePythonError("ExecuteAbility", e);
                 }
             }
-            
+
             // Fallback to C# implementation
             base.ExecuteAbility(context);
         }
-        
+
         #endregion
-        
+
         #region Python Integration
-        
+
         /// <summary>
         /// Initialize Python integration
         /// </summary>
@@ -122,7 +122,7 @@ namespace L5RGame.Cards.Abilities
             {
                 return;
             }
-            
+
             try
             {
                 LoadPythonScript();
@@ -133,7 +133,7 @@ namespace L5RGame.Cards.Abilities
                 pythonExecutionFailed = true;
             }
         }
-        
+
         /// <summary>
         /// Load the Python script
         /// </summary>
@@ -155,19 +155,19 @@ namespace L5RGame.Cards.Abilities
             }
 #endif
         }
-        
+
         /// <summary>
         /// Check if Python implementation should be used
         /// </summary>
         /// <returns>True if Python should be used</returns>
         private bool ShouldUsePythonImplementation()
         {
-            return preferPythonImplementation && 
-                   pythonScriptLoaded && 
-                   !pythonExecutionFailed && 
+            return preferPythonImplementation &&
+                   pythonScriptLoaded &&
+                   !pythonExecutionFailed &&
                    PythonManager.Instance.IsEnabled;
         }
-        
+
         /// <summary>
         /// Execute Python CanExecute method
         /// </summary>
@@ -192,7 +192,7 @@ namespace L5RGame.Cards.Abilities
             return true;
 #endif
         }
-        
+
         /// <summary>
         /// Execute Python ability implementation
         /// </summary>
@@ -207,7 +207,7 @@ namespace L5RGame.Cards.Abilities
             );
 #endif
         }
-        
+
         /// <summary>
         /// Get valid targets from Python script
         /// </summary>
@@ -216,7 +216,7 @@ namespace L5RGame.Cards.Abilities
         public List<BaseCard> GetPythonValidTargets(AbilityContext context)
         {
             var targets = new List<BaseCard>();
-            
+
 #if UNITY_EDITOR || UNITY_STANDALONE
             if (!ShouldUsePythonImplementation())
             {
@@ -247,10 +247,10 @@ namespace L5RGame.Cards.Abilities
                 HandlePythonError("GetPythonValidTargets", e);
             }
 #endif
-            
+
             return targets;
         }
-        
+
         /// <summary>
         /// Handle Python execution errors
         /// </summary>
@@ -259,7 +259,7 @@ namespace L5RGame.Cards.Abilities
         private void HandlePythonError(string method, Exception exception)
         {
             Debug.LogError($"❌ Python execution failed in {method}: {exception.Message}");
-            
+
             if (fallbackToCSharp)
             {
                 Debug.Log("🔄 Falling back to C# implementation");
@@ -270,11 +270,11 @@ namespace L5RGame.Cards.Abilities
                 throw exception;
             }
         }
-        
+
         #endregion
-        
+
         #region AI Recommendations
-        
+
         /// <summary>
         /// Generate AI recommendation for target selection
         /// </summary>
@@ -284,7 +284,7 @@ namespace L5RGame.Cards.Abilities
             try
             {
                 currentRecommendation = GetAIRecommendation(context);
-                
+
                 if (currentRecommendation != null && showStrategicValues)
                 {
                     Debug.Log($"🤖 AI Recommendation: {currentRecommendation.Action} {currentRecommendation.Target.Name} " +
@@ -296,7 +296,7 @@ namespace L5RGame.Cards.Abilities
                 Debug.LogWarning($"Failed to generate AI recommendation: {e.Message}");
             }
         }
-        
+
         /// <summary>
         /// Get AI recommendation from Python or C# implementation
         /// </summary>
@@ -316,11 +316,11 @@ namespace L5RGame.Cards.Abilities
                     HandlePythonError("GetAIRecommendation", e);
                 }
             }
-            
+
             // Fallback to C# implementation
             return GenerateAIRecommendationCSharp(context);
         }
-        
+
         /// <summary>
         /// Get AI recommendation from Python script
         /// </summary>
@@ -353,10 +353,10 @@ namespace L5RGame.Cards.Abilities
                 }
             }
 #endif
-            
+
             return null;
         }
-        
+
         /// <summary>
         /// Generate AI recommendation using C# logic
         /// </summary>
@@ -369,20 +369,20 @@ namespace L5RGame.Cards.Abilities
             {
                 return null;
             }
-            
+
             AIRecommendation bestRecommendation = null;
             float bestValue = -1f;
-            
+
             foreach (var target in validTargets)
             {
                 var availableActions = GetAvailableActionsForTarget(target, context);
                 float targetValue = GetTargetStrategicValue(target, context);
-                
+
                 foreach (var action in availableActions)
                 {
                     float actionModifier = GetActionModifier(action, target, context);
                     float totalValue = targetValue * actionModifier;
-                    
+
                     if (totalValue > bestValue)
                     {
                         bestValue = totalValue;
@@ -396,10 +396,10 @@ namespace L5RGame.Cards.Abilities
                     }
                 }
             }
-            
+
             return bestRecommendation;
         }
-        
+
         /// <summary>
         /// Get action modifier for strategic calculations
         /// </summary>
@@ -410,7 +410,7 @@ namespace L5RGame.Cards.Abilities
         private float GetActionModifier(string action, BaseCard target, AbilityContext context)
         {
             float modifier = 1.0f;
-            
+
             if (action == "Honor" && target.Owner == context.Player)
             {
                 modifier = 1.2f; // Prefer honoring own characters
@@ -419,10 +419,10 @@ namespace L5RGame.Cards.Abilities
             {
                 modifier = 1.3f; // Prefer dishonoring opponent's characters
             }
-            
+
             return modifier;
         }
-        
+
         /// <summary>
         /// Check if the ability should be auto-executed based on recommendation
         /// </summary>
@@ -432,14 +432,14 @@ namespace L5RGame.Cards.Abilities
         {
             if (!enableAIRecommendations || currentRecommendation == null)
                 return false;
-                
+
             return currentRecommendation.StrategicValue >= autoExecuteThreshold;
         }
-        
+
         #endregion
-        
+
         #region Enhanced UI Integration
-        
+
         /// <summary>
         /// Get enhanced target data with strategic information
         /// </summary>
@@ -449,7 +449,7 @@ namespace L5RGame.Cards.Abilities
         {
             var targets = GetValidCharacterTargets(context);
             var enhancedData = new List<EnhancedTargetData>();
-            
+
             foreach (var target in targets)
             {
                 var data = new EnhancedTargetData
@@ -461,22 +461,22 @@ namespace L5RGame.Cards.Abilities
                     IsRecommended = currentRecommendation?.Target == target,
                     RecommendedAction = currentRecommendation?.Target == target ? currentRecommendation.Action : null
                 };
-                
+
                 // Generate description
                 data.Description = GenerateTargetDescription(data);
-                
+
                 enhancedData.Add(data);
             }
-            
+
             // Sort by strategic value if enabled
             if (showStrategicValues)
             {
                 enhancedData = enhancedData.OrderByDescending(d => d.StrategicValue).ToList();
             }
-            
+
             return enhancedData;
         }
-        
+
         /// <summary>
         /// Generate description for enhanced target data
         /// </summary>
@@ -485,24 +485,24 @@ namespace L5RGame.Cards.Abilities
         private string GenerateTargetDescription(EnhancedTargetData data)
         {
             var description = $"Actions: {string.Join(", ", data.AvailableActions)}";
-            
+
             if (showStrategicValues)
             {
                 description += $" | Value: {data.StrategicValue:F1}/10";
             }
-            
+
             if (data.IsRecommended && highlightRecommendedTargets)
             {
                 description += $" | ⭐ Recommended: {data.RecommendedAction}";
             }
-            
+
             return description;
         }
-        
+
         #endregion
-        
+
         #region Enhanced Analytics
-        
+
         /// <summary>
         /// Log enhanced analytics with AI data
         /// </summary>
@@ -510,12 +510,12 @@ namespace L5RGame.Cards.Abilities
         /// <param name="selectedTarget">Selected target</param>
         /// <param name="selectedAction">Selected action</param>
         /// <param name="wasRecommended">Whether this was the AI recommendation</param>
-        protected void LogEnhancedAnalytics(AbilityContext context, BaseCard selectedTarget, 
+        protected void LogEnhancedAnalytics(AbilityContext context, BaseCard selectedTarget,
                                           string selectedAction, bool wasRecommended)
         {
             if (!logDetailedAnalytics)
                 return;
-                
+
             var analyticsData = new Dictionary<string, object>
             {
                 { "ability_id", AbilityId },
@@ -526,7 +526,7 @@ namespace L5RGame.Cards.Abilities
                 { "implementation_used", ShouldUsePythonImplementation() ? "python" : "csharp" },
                 { "turn_number", Game.TurnManager.CurrentTurn }
             };
-            
+
             if (currentRecommendation != null)
             {
                 analyticsData.Add("ai_recommended_target", currentRecommendation.Target.CardId);
@@ -534,19 +534,19 @@ namespace L5RGame.Cards.Abilities
                 analyticsData.Add("ai_strategic_value", currentRecommendation.StrategicValue);
                 analyticsData.Add("player_followed_recommendation", wasRecommended);
             }
-            
+
             // Add valid targets data
             var validTargets = GetValidCharacterTargets(context);
             analyticsData.Add("valid_targets_count", validTargets.Count);
             analyticsData.Add("valid_target_ids", validTargets.Select(t => t.CardId).ToArray());
-            
+
             Game.Analytics.LogEvent("fire_ring_effect_enhanced", analyticsData);
         }
-        
+
         #endregion
-        
+
         #region Hot Reload Support
-        
+
         /// <summary>
         /// Reload Python script for hot reload during development
         /// </summary>
@@ -558,17 +558,30 @@ namespace L5RGame.Cards.Abilities
                 Debug.LogWarning("Python script reload only available during play mode");
                 return;
             }
-            
+
             pythonScriptLoaded = false;
             pythonExecutionFailed = false;
             currentRecommendation = null;
-            
+
             try
             {
                 // Execute reload function in Python
 #if UNITY_EDITOR || UNITY_STANDALONE
                 PythonManager.Instance.ExecuteFunction(pythonScriptName, "reload_script");
 #endif
-                
+
                 // Reinitialize
                 InitializePythonIntegration();
+
+                Debug.Log("🔄 Python script reloaded successfully");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"❌ Failed to reload Python script: {e.Message}");
+            }
+        }
+
+        #endregion
+
+    }
+}

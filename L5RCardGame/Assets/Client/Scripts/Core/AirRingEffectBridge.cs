@@ -20,37 +20,37 @@ namespace L5RGame.Cards.Abilities
     public class AirRingEffectBridge : AirRingEffect
     {
         #region Fields
-        
+
         [Header("Python Integration")]
         [SerializeField] private bool preferPythonImplementation = true;
         [SerializeField] private bool fallbackToCSharp = true;
         [SerializeField] private string pythonScriptName = "air_ring_effect";
-        
+
         private bool pythonScriptLoaded = false;
         private bool pythonExecutionFailed = false;
-        
+
         #endregion
-        
+
         #region Constructor
-        
+
         public AirRingEffectBridge() : this(true) { }
-        
+
         public AirRingEffectBridge(bool optional) : base(optional)
         {
             // Initialize Python integration if available
             InitializePythonIntegration();
         }
-        
+
         #endregion
-        
+
         #region BaseAbility Override
-        
+
         public override void Initialize(BaseCard sourceCard, Game gameInstance)
         {
             base.Initialize(sourceCard, gameInstance);
             InitializePythonIntegration();
         }
-        
+
         public override bool CanExecute(AbilityContext context)
         {
             // Try Python implementation first
@@ -65,11 +65,11 @@ namespace L5RGame.Cards.Abilities
                     HandlePythonError("CanExecute", e);
                 }
             }
-            
+
             // Fallback to C# implementation
             return base.CanExecute(context);
         }
-        
+
         public override void ExecuteAbility(AbilityContext context)
         {
             // Try Python implementation first
@@ -85,15 +85,15 @@ namespace L5RGame.Cards.Abilities
                     HandlePythonError("ExecuteAbility", e);
                 }
             }
-            
+
             // Fallback to C# implementation
             base.ExecuteAbility(context);
         }
-        
+
         #endregion
-        
+
         #region Python Integration
-        
+
         /// <summary>
         /// Initialize Python integration
         /// </summary>
@@ -103,7 +103,7 @@ namespace L5RGame.Cards.Abilities
             {
                 return;
             }
-            
+
             try
             {
                 LoadPythonScript();
@@ -114,7 +114,7 @@ namespace L5RGame.Cards.Abilities
                 pythonExecutionFailed = true;
             }
         }
-        
+
         /// <summary>
         /// Load the Python script
         /// </summary>
@@ -136,19 +136,19 @@ namespace L5RGame.Cards.Abilities
             }
 #endif
         }
-        
+
         /// <summary>
         /// Check if Python implementation should be used
         /// </summary>
         /// <returns>True if Python should be used</returns>
         private bool ShouldUsePythonImplementation()
         {
-            return preferPythonImplementation && 
-                   pythonScriptLoaded && 
-                   !pythonExecutionFailed && 
+            return preferPythonImplementation &&
+                   pythonScriptLoaded &&
+                   !pythonExecutionFailed &&
                    PythonManager.Instance.IsEnabled;
         }
-        
+
         /// <summary>
         /// Execute Python CanExecute method
         /// </summary>
@@ -174,7 +174,7 @@ namespace L5RGame.Cards.Abilities
             return true;
 #endif
         }
-        
+
         /// <summary>
         /// Execute Python ability implementation
         /// </summary>
@@ -189,7 +189,7 @@ namespace L5RGame.Cards.Abilities
             );
 #endif
         }
-        
+
         /// <summary>
         /// Get available choices from Python script
         /// </summary>
@@ -198,7 +198,7 @@ namespace L5RGame.Cards.Abilities
         public List<ChoiceData> GetPythonChoices(AbilityContext context)
         {
             var choices = new List<ChoiceData>();
-            
+
 #if UNITY_EDITOR || UNITY_STANDALONE
             if (!ShouldUsePythonImplementation())
             {
@@ -237,10 +237,10 @@ namespace L5RGame.Cards.Abilities
                 HandlePythonError("GetPythonChoices", e);
             }
 #endif
-            
+
             return choices;
         }
-        
+
         /// <summary>
         /// Handle Python execution errors
         /// </summary>
@@ -249,7 +249,7 @@ namespace L5RGame.Cards.Abilities
         private void HandlePythonError(string method, Exception exception)
         {
             Debug.LogError($"❌ Python execution failed in {method}: {exception.Message}");
-            
+
             if (fallbackToCSharp)
             {
                 Debug.Log("🔄 Falling back to C# implementation");
@@ -260,11 +260,11 @@ namespace L5RGame.Cards.Abilities
                 throw exception;
             }
         }
-        
+
         #endregion
-        
+
         #region Hot Reload Support
-        
+
         /// <summary>
         /// Reload Python script for hot reload during development
         /// </summary>
@@ -276,20 +276,20 @@ namespace L5RGame.Cards.Abilities
                 Debug.LogWarning("Python script reload only available during play mode");
                 return;
             }
-            
+
             pythonScriptLoaded = false;
             pythonExecutionFailed = false;
-            
+
             try
             {
                 // Execute reload function in Python
 #if UNITY_EDITOR || UNITY_STANDALONE
                 PythonManager.Instance.ExecuteFunction(pythonScriptName, "reload_script");
 #endif
-                
+
                 // Reinitialize
                 InitializePythonIntegration();
-                
+
                 Debug.Log("🔄 Python script reloaded successfully");
             }
             catch (Exception e)
@@ -297,11 +297,11 @@ namespace L5RGame.Cards.Abilities
                 Debug.LogError($"❌ Failed to reload Python script: {e.Message}");
             }
         }
-        
+
         #endregion
-        
+
         #region Development & Testing
-        
+
         /// <summary>
         /// Test the Python implementation
         /// </summary>
@@ -313,7 +313,7 @@ namespace L5RGame.Cards.Abilities
                 Debug.LogWarning("Python testing only available during play mode");
                 return;
             }
-            
+
             try
             {
 #if UNITY_EDITOR || UNITY_STANDALONE
@@ -325,3 +325,8 @@ namespace L5RGame.Cards.Abilities
             {
                 Debug.LogError($"❌ Python implementation test failed: {e.Message}");
             }
+        }
+
+        #endregion
+    }
+}

@@ -21,56 +21,56 @@ namespace L5RGame.Cards.Abilities
     public class WaterRingEffectBridge : WaterRingEffect
     {
         #region Fields
-        
+
         [Header("Python Integration")]
         [SerializeField] private bool preferPythonImplementation = true;
         [SerializeField] private bool fallbackToCSharp = true;
         [SerializeField] private string pythonScriptName = "water_ring_effect";
-        
+
         [Header("AI Integration")]
         [SerializeField] private bool enableAIRecommendations = true;
         [SerializeField] private bool showStrategicValues = true;
         [SerializeField] private float autoExecuteThreshold = 7.0f;
         [SerializeField] private bool highlightTacticalMoves = true;
-        
+
         [Header("Board Analysis")]
         [SerializeField] private bool enableBoardPositionAnalysis = true;
         [SerializeField] private bool trackCharacterStatus = true;
         [SerializeField] private bool analyzeConflictParticipation = true;
         [SerializeField] private bool enableTacticalSuggestions = true;
-        
+
         [Header("Advanced Analytics")]
         [SerializeField] private bool logDetailedAnalytics = true;
         [SerializeField] private bool trackStatusChanges = true;
         [SerializeField] private bool monitorBoardControl = true;
-        
+
         private bool pythonScriptLoaded = false;
         private bool pythonExecutionFailed = false;
         private WaterRingRecommendation currentRecommendation;
         private BoardPositionAnalysis currentBoardAnalysis;
-        
+
         #endregion
-        
+
         #region Constructor
-        
+
         public WaterRingEffectBridge() : this(true) { }
-        
+
         public WaterRingEffectBridge(bool optional) : base(optional)
         {
             // Initialize Python integration if available
             InitializePythonIntegration();
         }
-        
+
         #endregion
-        
+
         #region BaseAbility Override
-        
+
         public override void Initialize(BaseCard sourceCard, Game gameInstance)
         {
             base.Initialize(sourceCard, gameInstance);
             InitializePythonIntegration();
         }
-        
+
         public override bool CanExecute(AbilityContext context)
         {
             // Try Python implementation first
@@ -85,11 +85,11 @@ namespace L5RGame.Cards.Abilities
                     HandlePythonError("CanExecute", e);
                 }
             }
-            
+
             // Fallback to C# implementation
             return base.CanExecute(context);
         }
-        
+
         public override void ExecuteAbility(AbilityContext context)
         {
             // Generate AI recommendation if enabled
@@ -97,13 +97,13 @@ namespace L5RGame.Cards.Abilities
             {
                 GenerateAIRecommendation(context);
             }
-            
+
             // Analyze board position if enabled
             if (enableBoardPositionAnalysis)
             {
                 AnalyzeBoardPosition(context);
             }
-            
+
             // Try Python implementation first
             if (ShouldUsePythonImplementation())
             {
@@ -117,15 +117,15 @@ namespace L5RGame.Cards.Abilities
                     HandlePythonError("ExecuteAbility", e);
                 }
             }
-            
+
             // Fallback to C# implementation
             base.ExecuteAbility(context);
         }
-        
+
         #endregion
-        
+
         #region Python Integration
-        
+
         /// <summary>
         /// Initialize Python integration
         /// </summary>
@@ -135,7 +135,7 @@ namespace L5RGame.Cards.Abilities
             {
                 return;
             }
-            
+
             try
             {
                 LoadPythonScript();
@@ -146,7 +146,7 @@ namespace L5RGame.Cards.Abilities
                 pythonExecutionFailed = true;
             }
         }
-        
+
         /// <summary>
         /// Load the Python script
         /// </summary>
@@ -168,19 +168,19 @@ namespace L5RGame.Cards.Abilities
             }
 #endif
         }
-        
+
         /// <summary>
         /// Check if Python implementation should be used
         /// </summary>
         /// <returns>True if Python should be used</returns>
         private bool ShouldUsePythonImplementation()
         {
-            return preferPythonImplementation && 
-                   pythonScriptLoaded && 
-                   !pythonExecutionFailed && 
+            return preferPythonImplementation &&
+                   pythonScriptLoaded &&
+                   !pythonExecutionFailed &&
                    PythonManager.Instance.IsEnabled;
         }
-        
+
         /// <summary>
         /// Execute Python CanExecute method
         /// </summary>
@@ -205,7 +205,7 @@ namespace L5RGame.Cards.Abilities
             return true;
 #endif
         }
-        
+
         /// <summary>
         /// Execute Python ability implementation
         /// </summary>
@@ -220,7 +220,7 @@ namespace L5RGame.Cards.Abilities
             );
 #endif
         }
-        
+
         /// <summary>
         /// Get valid targets from Python script
         /// </summary>
@@ -229,7 +229,7 @@ namespace L5RGame.Cards.Abilities
         public List<BaseCard> GetPythonValidTargets(AbilityContext context)
         {
             var targets = new List<BaseCard>();
-            
+
 #if UNITY_EDITOR || UNITY_STANDALONE
             if (!ShouldUsePythonImplementation())
             {
@@ -260,10 +260,10 @@ namespace L5RGame.Cards.Abilities
                 HandlePythonError("GetPythonValidTargets", e);
             }
 #endif
-            
+
             return targets;
         }
-        
+
         /// <summary>
         /// Handle Python execution errors
         /// </summary>
@@ -272,7 +272,7 @@ namespace L5RGame.Cards.Abilities
         private void HandlePythonError(string method, Exception exception)
         {
             Debug.LogError($"❌ Python execution failed in {method}: {exception.Message}");
-            
+
             if (fallbackToCSharp)
             {
                 Debug.Log("🔄 Falling back to C# implementation");
@@ -283,11 +283,11 @@ namespace L5RGame.Cards.Abilities
                 throw exception;
             }
         }
-        
+
         #endregion
-        
+
         #region AI Recommendations
-        
+
         /// <summary>
         /// Generate AI recommendation for target selection
         /// </summary>
@@ -297,7 +297,7 @@ namespace L5RGame.Cards.Abilities
             try
             {
                 currentRecommendation = GetAIRecommendation(context);
-                
+
                 if (currentRecommendation != null && showStrategicValues)
                 {
                     var actionText = currentRecommendation.Action;
@@ -311,7 +311,7 @@ namespace L5RGame.Cards.Abilities
                 Debug.LogWarning($"Failed to generate AI recommendation: {e.Message}");
             }
         }
-        
+
         /// <summary>
         /// Get AI recommendation from Python or C# implementation
         /// </summary>
@@ -331,11 +331,11 @@ namespace L5RGame.Cards.Abilities
                     HandlePythonError("GetAIRecommendation", e);
                 }
             }
-            
+
             // Fallback to C# implementation
             return GenerateAIRecommendationCSharp(context);
         }
-        
+
         /// <summary>
         /// Get AI recommendation from Python script
         /// </summary>
@@ -371,10 +371,10 @@ namespace L5RGame.Cards.Abilities
                 }
             }
 #endif
-            
+
             return null;
         }
-        
+
         /// <summary>
         /// Generate AI recommendation using C# logic
         /// </summary>
@@ -387,11 +387,11 @@ namespace L5RGame.Cards.Abilities
             {
                 return null;
             }
-            
+
             var strategicValue = GetTargetStrategicValue(bestTarget, context);
             var action = bestTarget.IsBowed ? "Ready" : "Bow";
             var reasoning = GenerateReasoningCSharp(bestTarget, context);
-            
+
             return new WaterRingRecommendation
             {
                 Target = bestTarget,
@@ -402,7 +402,7 @@ namespace L5RGame.Cards.Abilities
                 Source = "C# AI"
             };
         }
-        
+
         /// <summary>
         /// Generate reasoning for C# recommendation
         /// </summary>
@@ -412,7 +412,7 @@ namespace L5RGame.Cards.Abilities
         private string GenerateReasoningCSharp(BaseCard target, AbilityContext context)
         {
             var reasons = new List<string>();
-            
+
             if (target.IsBowed)
             {
                 if (target.Owner == context.Player)
@@ -455,15 +455,15 @@ namespace L5RGame.Cards.Abilities
                     }
                 }
             }
-            
+
             if (target.FateTokens == 0)
             {
                 reasons.Add("no fate (vulnerable)");
             }
-            
+
             return string.Join(", ", reasons);
         }
-        
+
         /// <summary>
         /// Check if the ability should be auto-executed based on recommendation
         /// </summary>
@@ -473,14 +473,14 @@ namespace L5RGame.Cards.Abilities
         {
             if (!enableAIRecommendations || currentRecommendation == null)
                 return false;
-                
+
             return currentRecommendation.StrategicValue >= autoExecuteThreshold;
         }
-        
+
         #endregion
-        
+
         #region Board Position Analysis
-        
+
         /// <summary>
         /// Analyze current board position for tactical insights
         /// </summary>
@@ -499,11 +499,11 @@ namespace L5RGame.Cards.Abilities
                     // Fallback to C# analysis
                     currentBoardAnalysis = AnalyzeBoardPositionCSharp(context);
                 }
-                
+
                 if (currentBoardAnalysis != null && enableTacticalSuggestions)
                 {
                     Debug.Log($"📋 Board Analysis: {currentBoardAnalysis.Summary}");
-                    
+
                     if (currentBoardAnalysis.TacticalSuggestions.Count > 0)
                     {
                         Debug.Log($"💡 Tactical Suggestions: {string.Join(", ", currentBoardAnalysis.TacticalSuggestions)}");
@@ -515,7 +515,7 @@ namespace L5RGame.Cards.Abilities
                 Debug.LogWarning($"Failed to analyze board position: {e.Message}");
             }
         }
-        
+
         /// <summary>
         /// Get board analysis from Python script
         /// </summary>
@@ -546,10 +546,10 @@ namespace L5RGame.Cards.Abilities
                 };
             }
 #endif
-            
+
             return null;
         }
-        
+
         /// <summary>
         /// Analyze board position using C# logic
         /// </summary>
@@ -560,13 +560,13 @@ namespace L5RGame.Cards.Abilities
             var allCharacters = Game.GameState.GetAllCardsInPlay()
                 .Where(c => c.CardType == CardTypes.Character)
                 .ToList();
-            
+
             var analysis = new BoardPositionAnalysis();
-            
+
             foreach (var character in allCharacters)
             {
                 analysis.TotalCharactersInPlay++;
-                
+
                 if (character.Owner == context.Player)
                 {
                     if (character.IsBowed)
@@ -581,20 +581,20 @@ namespace L5RGame.Cards.Abilities
                     else
                         analysis.OpponentReadyCharacters++;
                 }
-                
+
                 if (character.FateTokens == 0)
                     analysis.VulnerableCharacters++;
-                    
+
                 if (character.Power >= 4)
                     analysis.HighPowerTargets++;
             }
-            
+
             analysis.Summary = GenerateBoardSummaryCSharp(analysis);
             analysis.TacticalSuggestions = GenerateTacticalSuggestions(analysis, context);
-            
+
             return analysis;
         }
-        
+
         /// <summary>
         /// Generate board summary from Python analysis
         /// </summary>
@@ -605,10 +605,10 @@ namespace L5RGame.Cards.Abilities
             var ownReady = Convert.ToInt32(analysisDict.get("own_ready_characters", 0));
             var opponentReady = Convert.ToInt32(analysisDict.get("opponent_ready_characters", 0));
             var vulnerable = Convert.ToInt32(analysisDict.get("vulnerable_characters", 0));
-            
+
             return $"Board: {ownReady} your ready vs {opponentReady} opponent ready, {vulnerable} vulnerable";
         }
-        
+
         /// <summary>
         /// Generate board summary from C# analysis
         /// </summary>
@@ -619,7 +619,7 @@ namespace L5RGame.Cards.Abilities
             return $"Board: {analysis.OwnReadyCharacters} your ready vs {analysis.OpponentReadyCharacters} opponent ready, " +
                    $"{analysis.VulnerableCharacters} vulnerable";
         }
-        
+
         /// <summary>
         /// Generate tactical suggestions based on board state
         /// </summary>
@@ -629,38 +629,38 @@ namespace L5RGame.Cards.Abilities
         private List<string> GenerateTacticalSuggestions(BoardPositionAnalysis analysis, AbilityContext context)
         {
             var suggestions = new List<string>();
-            
+
             // Suggest readying own characters if many are bowed
             if (analysis.OwnBowedCharacters > analysis.OwnReadyCharacters)
             {
                 suggestions.Add("Consider readying your characters for board presence");
             }
-            
+
             // Suggest bowing opponent threats
             if (analysis.OpponentReadyCharacters > analysis.OwnReadyCharacters)
             {
                 suggestions.Add("Priority: bow opponent's ready characters");
             }
-            
+
             // Suggest targeting vulnerable characters
             if (analysis.VulnerableCharacters > 0)
             {
                 suggestions.Add("Target vulnerable characters (no fate)");
             }
-            
+
             // Suggest focusing on high-power targets
             if (analysis.HighPowerTargets > 2)
             {
                 suggestions.Add("Focus on high-power threats");
             }
-            
+
             return suggestions;
         }
-        
+
         #endregion
-        
+
         #region Enhanced UI Integration
-        
+
         /// <summary>
         /// Get enhanced target data with board position context
         /// </summary>
@@ -670,7 +670,7 @@ namespace L5RGame.Cards.Abilities
         {
             var targets = GetValidCharacterTargets(context);
             var enhancedData = new List<EnhancedWaterTargetData>();
-            
+
             foreach (var target in targets)
             {
                 var data = new EnhancedWaterTargetData
@@ -687,23 +687,23 @@ namespace L5RGame.Cards.Abilities
                     IsParticipatingInConflict = target.IsParticipatingInConflict,
                     IsVulnerable = target.FateTokens == 0
                 };
-                
+
                 // Generate description
                 data.Description = GenerateEnhancedTargetDescription(data);
-                
+
                 enhancedData.Add(data);
             }
-            
+
             // Sort by tactical priority
             enhancedData = enhancedData
                 .OrderByDescending(d => d.IsRecommended ? 1 : 0)
                 .ThenByDescending(d => d.StrategicValue)
                 .ThenByDescending(d => d.IsParticipatingInConflict ? 1 : 0)
                 .ToList();
-            
+
             return enhancedData;
         }
-        
+
         /// <summary>
         /// Generate enhanced description for target data
         /// </summary>
@@ -713,34 +713,34 @@ namespace L5RGame.Cards.Abilities
         {
             var description = $"{data.OwnerType}'s {(data.IsBowed ? "bowed" : "ready")} character " +
                              $"({data.Power} power, {data.FateTokens} fate) - Will {data.Action}";
-            
+
             if (data.IsParticipatingInConflict && highlightTacticalMoves)
             {
                 description += " ⚔️ In Conflict";
             }
-            
+
             if (data.IsVulnerable)
             {
                 description += " ⚠️ Vulnerable";
             }
-            
+
             if (showStrategicValues)
             {
                 description += $" | Value: {data.StrategicValue:F1}/10";
             }
-            
+
             if (data.IsRecommended)
             {
                 description += " | ⭐ AI Recommended";
             }
-            
+
             return description;
         }
-        
+
         #endregion
-        
+
         #region Enhanced Analytics
-        
+
         /// <summary>
         /// Log enhanced analytics with board state data
         /// </summary>
@@ -748,14 +748,14 @@ namespace L5RGame.Cards.Abilities
         /// <param name="selectedTarget">Selected target</param>
         /// <param name="action">Action taken</param>
         /// <param name="wasRecommended">Whether this was the AI recommendation</param>
-        protected void LogEnhancedAnalytics(AbilityContext context, BaseCard selectedTarget, 
+        protected void LogEnhancedAnalytics(AbilityContext context, BaseCard selectedTarget,
                                           string action, bool wasRecommended)
         {
             if (!logDetailedAnalytics)
                 return;
-                
+
             var boardAnalysis = currentBoardAnalysis ?? AnalyzeBoardPositionCSharp(context);
-            
+
             var analyticsData = new Dictionary<string, object>
             {
                 { "ability_id", AbilityId },
@@ -766,7 +766,7 @@ namespace L5RGame.Cards.Abilities
                 { "implementation_used", ShouldUsePythonImplementation() ? "python" : "csharp" },
                 { "turn_number", Game.TurnManager.CurrentTurn }
             };
-            
+
             // Add board state data
             if (boardAnalysis != null)
             {
@@ -778,7 +778,7 @@ namespace L5RGame.Cards.Abilities
                 analyticsData.Add("board_vulnerable", boardAnalysis.VulnerableCharacters);
                 analyticsData.Add("board_high_power", boardAnalysis.HighPowerTargets);
             }
-            
+
             // Add target data
             if (selectedTarget != null)
             {
@@ -789,7 +789,7 @@ namespace L5RGame.Cards.Abilities
                 analyticsData.Add("target_in_conflict", selectedTarget.IsParticipatingInConflict);
                 analyticsData.Add("target_vulnerable", selectedTarget.FateTokens == 0);
             }
-            
+
             // Add recommendation data
             if (currentRecommendation != null)
             {
@@ -799,14 +799,14 @@ namespace L5RGame.Cards.Abilities
                 analyticsData.Add("ai_reasoning", currentRecommendation.Reasoning);
                 analyticsData.Add("player_followed_recommendation", wasRecommended);
             }
-            
+
             Game.Analytics.LogEvent("water_ring_effect_enhanced", analyticsData);
         }
-        
+
         #endregion
-        
+
         #region Hot Reload Support
-        
+
         /// <summary>
         /// Reload Python script for hot reload during development
         /// </summary>
@@ -818,22 +818,22 @@ namespace L5RGame.Cards.Abilities
                 Debug.LogWarning("Python script reload only available during play mode");
                 return;
             }
-            
+
             pythonScriptLoaded = false;
             pythonExecutionFailed = false;
             currentRecommendation = null;
             currentBoardAnalysis = null;
-            
+
             try
             {
                 // Execute reload function in Python
 #if UNITY_EDITOR || UNITY_STANDALONE
                 PythonManager.Instance.ExecuteFunction(pythonScriptName, "reload_script");
 #endif
-                
+
                 // Reinitialize
                 InitializePythonIntegration();
-                
+
                 Debug.Log("🔄 Python script reloaded successfully");
             }
             catch (Exception e)
@@ -841,30 +841,8 @@ namespace L5RGame.Cards.Abilities
                 Debug.LogError($"❌ Failed to reload Python script: {e.Message}");
             }
         }
-        
+
         #endregion
-        
-        #region Development & Testing
-        
-        /// <summary>
-        /// Get implementation status for debugging
-        /// </summary>
-        /// <returns>Status information</returns>
-        public string GetImplementationStatus()
-        {
-            var status = $"Water Ring Effect Implementation Status:\n";
-            status += $"• Prefer Python: {preferPythonImplementation}\n";
-            status += $"• Python Loaded: {pythonScriptLoaded}\n";
-            status += $"• Python Failed: {pythonExecutionFailed}\n";
-            status += $"• Python Enabled: {PythonManager.Instance?.IsEnabled}\n";
-            status += $"• Using Python: {ShouldUsePythonImplementation()}\n";
-            status += $"• Fallback Enabled: {fallbackToCSharp}\n";
-            status += $"• AI Recommendations: {enableAIRecommendations}\n";
-            status += $"• Board Analysis: {enableBoardPositionAnalysis}\n";
-            status += $"• Tactical Suggestions: {enableTacticalSuggestions}\n";
-            status += $"• Current Recommendation: {(currentRecommendation != null ? $"{currentRecommendation.Action} {currentRecommendation.Target?.Name} (Value: {currentRecommendation.StrategicValue:F1})" : "None")}";
-            
-            return status;
-        }
-        
-        ///
+
+    }
+}
