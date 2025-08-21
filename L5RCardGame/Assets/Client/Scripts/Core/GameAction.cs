@@ -11,7 +11,7 @@ namespace L5RGame
     /// Game actions represent atomic operations that can affect players, cards, rings, or tokens.
     /// </summary>
     [System.Serializable]
-    public abstract class GameAction
+    public abstract partial class GameAction
     {
         [Header("Game Action Configuration")]
         [SerializeField] protected string actionName = "";
@@ -551,34 +551,5 @@ namespace L5RGame
         #endregion
     }
     
-    /// <summary>
-    /// Constants for event names used by game actions
-    /// </summary>
-    public static class EventNames
-    {
-        public const string Unnamed = "onUnnamed";
-        public const string CardEntersPlay = "onCardEntersPlay";
-        public const string CardLeavesPlay = "onCardLeavesPlay";
-        public const string CharacterBowed = "onCharacterBowed";
-        public const string CharacterReadied = "onCharacterReadied";
-        public const string ConflictDeclared = "onConflictDeclared";
-        public const string ConflictFinished = "onConflictFinished";
-        public const string FateGained = "onFateGained";
-        public const string FateLost = "onFateLost";
-        public const string HonorGained = "onHonorGained";
-        public const string HonorLost = "onHonorLost";
-        public const string CardDrawn = "onCardDrawn";
-        public const string CardDiscarded = "onCardDiscarded";
-        public const string RingClaimed = "onRingClaimed";
-        public const string RingReturned = "onRingReturned";
-        public const string TokenPlaced = "onTokenPlaced";
-        public const string TokenRemoved = "onTokenRemoved";
-        public const string AbilityTriggered = "onAbilityTriggered";
-        public const string DuelInitiated = "onDuelInitiated";
-        public const string DuelFinished = "onDuelFinished";
-        public const string PhaseStarted = "onPhaseStarted";
-        public const string PhaseEnded = "onPhaseEnded";
-        public const string GameStarted = "onGameStarted";
-        public const string GameEnded = "onGameEnded";
-    }
+    // EventNames are defined in Constants.cs
 }

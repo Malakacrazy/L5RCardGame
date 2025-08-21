@@ -391,109 +391,7 @@ namespace L5RGame
         public void SetAbility(object ability) { /* No ability reference needed */ }
     }
 
-    /// <summary>
-    /// Base class for card abilities that can have limits
-    /// </summary>
-    public abstract class BaseAbility
-    {
-        [Header("Ability Limit")]
-        public IAbilityLimit limit;
-        public BaseCard card;
-
-        protected BaseAbility()
-        {
-            limit = AbilityLimit.Unlimited();
-        }
-
-        /// <summary>
-        /// Set the limit for this ability
-        /// </summary>
-        /// <param name="abilityLimit">Limit to apply</param>
-        public void SetLimit(IAbilityLimit abilityLimit)
-        {
-            // Unregister old limit
-            if (limit != null && card?.game != null)
-            {
-                limit.UnregisterEvents(card.game);
-            }
-
-            limit = abilityLimit ?? AbilityLimit.Unlimited();
-            limit.SetAbility(this);
-
-            // Register new limit
-            if (card?.game != null)
-            {
-                limit.RegisterEvents(card.game);
-            }
-        }
-
-        /// <summary>
-        /// Check if this ability can be used by a player
-        /// </summary>
-        /// <param name="player">Player attempting to use the ability</param>
-        /// <returns>True if ability can be used</returns>
-        public virtual bool CanUse(Player player)
-        {
-            return limit == null || !limit.IsAtMax(player);
-        }
-
-        /// <summary>
-        /// Use this ability (increment the limit counter)
-        /// </summary>
-        /// <param name="player">Player using the ability</param>
-        public virtual void Use(Player player)
-        {
-            limit?.Increment(player);
-        }
-
-        /// <summary>
-        /// Get remaining uses for a player
-        /// </summary>
-        /// <param name="player">Player to check</param>
-        /// <returns>Remaining uses</returns>
-        public virtual int GetRemainingUses(Player player)
-        {
-            if (limit == null) return int.MaxValue;
-            
-            int maxUses = limit.GetModifiedMax(player);
-            if (maxUses == int.MaxValue) return int.MaxValue;
-            
-            if (limit is FixedAbilityLimit fixedLimit)
-            {
-                return fixedLimit.GetRemainingUses(player);
-            }
-            
-            return maxUses; // Fallback for other limit types
-        }
-
-        /// <summary>
-        /// Initialize the ability with a card reference
-        /// </summary>
-        /// <param name="sourceCard">Card this ability belongs to</param>
-        public virtual void Initialize(BaseCard sourceCard)
-        {
-            card = sourceCard;
-            if (limit != null)
-            {
-                limit.SetAbility(this);
-                if (card?.game != null)
-                {
-                    limit.RegisterEvents(card.game);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Cleanup when ability is destroyed
-        /// </summary>
-        public virtual void Cleanup()
-        {
-            if (limit != null && card?.game != null)
-            {
-                limit.UnregisterEvents(card.game);
-            }
-        }
-    }
+    // BaseAbility is defined in GameSupportingClasses.cs
 
     /// <summary>
     /// Extension methods for working with ability limits
@@ -564,16 +462,5 @@ namespace L5RGame
         public string eventName;
     }
 
-    /// <summary>
-    /// Additional event names for ability limits
-    /// </summary>
-    public static partial class EventNames
-    {
-        // These should already be defined in other classes, but including for completeness
-        public const string OnConflictFinished = "onConflictFinished";
-        public const string OnPhaseEnded = "onPhaseEnded";
-        public const string OnRoundEnded = "onRoundEnded";
-        public const string OnDuelFinished = "onDuelFinished";
-        public const string OnPassActionPhasePriority = "onPassActionPhasePriority";
-    }
+    // EventNames are defined in Constants.cs
 }
