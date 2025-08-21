@@ -12,31 +12,31 @@ namespace L5RGame
     [System.Serializable]
     public class StatusToken
     {
-        [Header(\"Token Identity\")]
+        [Header("Token Identity")]
         public string uuid;
         public string tokenType;
         public string name;
         public string description;
 
-        [Header(\"Token State\")]
+        [Header("Token State")]
         public BaseCard attachedCard;
         public Player attachedPlayer;
         public Ring attachedRing;
         public Province attachedProvince;
         public int value = 1;
 
-        [Header(\"Token Properties\")]
+        [Header("Token Properties")]
         public bool isPersistent = false;
         public bool isVisible = true;
         public bool canBeRemoved = true;
         public bool stackable = true;
         public UnityEngine.Color tokenColor = UnityEngine.Color.white;
 
-        [Header(\"Effects\")]
+        [Header("Effects")]
         public List<TokenEffect> effects = new List<TokenEffect>();
         public Dictionary<string, object> modifiers = new Dictionary<string, object>();
 
-        [Header(\"Lifecycle\")]
+        [Header("Lifecycle")]
         public Player owner;
         public Game game;
         public DateTime createdAt;
@@ -77,7 +77,7 @@ namespace L5RGame
             // Set token properties based on type
             SetTokenProperties(type);
 
-            Debug.Log($\"🏷️ StatusToken '{name}' created by {tokenOwner?.name ?? \"unknown\"}\");
+            Debug.Log($"🏷️ StatusToken '{name}' created by {tokenOwner?.name ?? "unknown"}");
         }
 
         /// <summary>
@@ -102,13 +102,13 @@ namespace L5RGame
         {
             switch (type?.ToLower())
             {
-                case TokenTypes.Honor: return \"Honor Token\";
-                case TokenTypes.Dishonor: return \"Dishonor Token\";
-                case TokenTypes.Fate: return \"Fate Token\";
-                case TokenTypes.Military: return \"Military Token\";
-                case TokenTypes.Political: return \"Political Token\";
-                case TokenTypes.Strength: return \"Strength Token\";
-                default: return $\"{type} Token\";
+                case TokenTypes.Honor: return "Honor Token";
+                case TokenTypes.Dishonor: return "Dishonor Token";
+                case TokenTypes.Fate: return "Fate Token";
+                case TokenTypes.Military: return "Military Token";
+                case TokenTypes.Political: return "Political Token";
+                case TokenTypes.Strength: return "Strength Token";
+                default: return $"{type} Token";
             }
         }
 
@@ -122,19 +122,19 @@ namespace L5RGame
             switch (type?.ToLower())
             {
                 case TokenTypes.Honor: 
-                    return \"This character gains +1 to both military and political skill\";
+                    return "This character gains +1 to both military and political skill";
                 case TokenTypes.Dishonor: 
-                    return \"This character gets -1 to both military and political skill and cannot be honored\";
+                    return "This character gets -1 to both military and political skill and cannot be honored";
                 case TokenTypes.Fate: 
-                    return \"Fate token that prevents character from being discarded during fate phase\";
+                    return "Fate token that prevents character from being discarded during fate phase";
                 case TokenTypes.Military: 
-                    return \"This character gains +1 military skill\";
+                    return "This character gains +1 military skill";
                 case TokenTypes.Political: 
-                    return \"This character gains +1 political skill\";
+                    return "This character gains +1 political skill";
                 case TokenTypes.Strength: 
-                    return \"This province gains +1 strength\";
+                    return "This province gains +1 strength";
                 default: 
-                    return $\"A {type} token with various effects\";
+                    return $"A {type} token with various effects";
             }
         }
 
@@ -152,15 +152,15 @@ namespace L5RGame
                     canBeRemoved = false;
                     AddEffect(new TokenEffect
                     {
-                        effectType = \"modifySkill\",
+                        effectType = "modifySkill",
                         militaryModifier = 1,
                         politicalModifier = 1,
-                        description = \"+1 military and political skill\"
+                        description = "+1 military and political skill"
                     });
                     AddEffect(new TokenEffect
                     {
-                        effectType = \"preventDishonor\",
-                        description = \"Cannot be dishonored while honored\"
+                        effectType = "preventDishonor",
+                        description = "Cannot be dishonored while honored"
                     });
                     break;
 
@@ -170,15 +170,15 @@ namespace L5RGame
                     canBeRemoved = false;
                     AddEffect(new TokenEffect
                     {
-                        effectType = \"modifySkill\",
+                        effectType = "modifySkill",
                         militaryModifier = -1,
                         politicalModifier = -1,
-                        description = \"-1 military and political skill\"
+                        description = "-1 military and political skill"
                     });
                     AddEffect(new TokenEffect
                     {
-                        effectType = \"preventHonor\",
-                        description = \"Cannot be honored while dishonored\"
+                        effectType = "preventHonor",
+                        description = "Cannot be honored while dishonored"
                     });
                     break;
 
@@ -189,8 +189,8 @@ namespace L5RGame
                     stackable = true;
                     AddEffect(new TokenEffect
                     {
-                        effectType = \"preventDiscard\",
-                        description = \"Prevents character from being discarded during fate phase\"
+                        effectType = "preventDiscard",
+                        description = "Prevents character from being discarded during fate phase"
                     });
                     break;
 
@@ -201,9 +201,9 @@ namespace L5RGame
                     stackable = true;
                     AddEffect(new TokenEffect
                     {
-                        effectType = \"modifyMilitarySkill\",
+                        effectType = "modifyMilitarySkill",
                         militaryModifier = 1,
-                        description = \"+1 military skill\"
+                        description = "+1 military skill"
                     });
                     break;
 
@@ -214,9 +214,9 @@ namespace L5RGame
                     stackable = true;
                     AddEffect(new TokenEffect
                     {
-                        effectType = \"modifyPoliticalSkill\",
+                        effectType = "modifyPoliticalSkill",
                         politicalModifier = 1,
-                        description = \"+1 political skill\"
+                        description = "+1 political skill"
                     });
                     break;
 
@@ -227,9 +227,9 @@ namespace L5RGame
                     stackable = true;
                     AddEffect(new TokenEffect
                     {
-                        effectType = \"modifyProvinceStrength\",
+                        effectType = "modifyProvinceStrength",
                         strengthModifier = 1,
-                        description = \"+1 province strength\"
+                        description = "+1 province strength"
                     });
                     break;
 
@@ -300,13 +300,13 @@ namespace L5RGame
             // Trigger events
             game?.EmitEvent(EventNames.OnAddTokenToCard, new Dictionary<string, object>
             {
-                {\"card\", card},
-                {\"token\", this},
-                {\"player\", owner}
+                {"card", card},
+                {"token", this},
+                {"player", owner}
             });
 
             lastModified = DateTime.Now;
-            Debug.Log($\"🏷️ Token '{name}' attached to {card.name}\");
+            Debug.Log($"🏷️ Token '{name}' attached to {card.name}");
             return true;
         }
 
@@ -331,7 +331,7 @@ namespace L5RGame
             ApplyEffects();
 
             lastModified = DateTime.Now;
-            Debug.Log($\"🏷️ Token '{name}' attached to player {player.name}\");
+            Debug.Log($"🏷️ Token '{name}' attached to player {player.name}");
             return true;
         }
 
@@ -356,7 +356,7 @@ namespace L5RGame
             ApplyEffects();
 
             lastModified = DateTime.Now;
-            Debug.Log($\"🏷️ Token '{name}' attached to {ring.element} ring\");
+            Debug.Log($"🏷️ Token '{name}' attached to {ring.element} ring");
             return true;
         }
 
@@ -400,23 +400,23 @@ namespace L5RGame
         {
             if (!canBeRemoved)
             {
-                Debug.LogWarning($\"🏷️ Cannot remove token '{name}' - removal not allowed\");
+                Debug.LogWarning($"🏷️ Cannot remove token '{name}' - removal not allowed");
                 return;
             }
 
             // Trigger events before removal
             game?.EmitEvent(EventNames.OnStatusTokenDiscarded, new Dictionary<string, object>
             {
-                {\"token\", this},
-                {\"card\", attachedCard},
-                {\"player\", attachedPlayer},
-                {\"ring\", attachedRing},
-                {\"owner\", owner}
+                {"token", this},
+                {"card", attachedCard},
+                {"player", attachedPlayer},
+                {"ring", attachedRing},
+                {"owner", owner}
             });
 
             Detach();
 
-            Debug.Log($\"🏷️ Token '{name}' removed\");
+            Debug.Log($"🏷️ Token '{name}' removed");
         }
 
         /// <summary>
@@ -552,10 +552,10 @@ namespace L5RGame
             {
                 game?.EmitEvent(EventNames.OnStatusTokenMoved, new Dictionary<string, object>
                 {
-                    {\"token\", this},
-                    {\"oldTarget\", oldTarget},
-                    {\"newTarget\", newTarget},
-                    {\"player\", owner}
+                    {"token", this},
+                    {"oldTarget", oldTarget},
+                    {"newTarget", newTarget},
+                    {"player", owner}
                 });
             }
 
@@ -583,7 +583,7 @@ namespace L5RGame
             ApplyEffects();
 
             lastModified = DateTime.Now;
-            Debug.Log($\"🏷️ Token '{name}' attached to province {province.name}\");
+            Debug.Log($"🏷️ Token '{name}' attached to province {province.name}");
             return true;
         }
 
@@ -637,7 +637,7 @@ namespace L5RGame
                 isPersistent = isPersistent,
                 isAttached = IsAttached(),
                 targetType = GetTarget()?.GetType().Name,
-                ownerName = owner?.name ?? \"Unknown\",
+                ownerName = owner?.name ?? "Unknown",
                 createdAt = createdAt,
                 timesActivated = timesActivated
             };
@@ -663,8 +663,8 @@ namespace L5RGame
                 value = value,
                 timesActivated = timesActivated,
                 effectCount = effects.Count,
-                militaryModifier = GetSkillModifier(\"military\"),
-                politicalModifier = GetSkillModifier(\"political\"),
+                militaryModifier = GetSkillModifier("military"),
+                politicalModifier = GetSkillModifier("political"),
                 strengthModifier = GetStrengthModifier(),
                 isPersistent = isPersistent,
                 canBeRemoved = canBeRemoved,
@@ -679,15 +679,15 @@ namespace L5RGame
         /// <returns>Token description</returns>
         public override string ToString()
         {
-            string target = \"\";
+            string target = "";
             if (IsAttached())
             {
                 var targetObj = GetTarget();
-                target = $\" on {targetObj}\";
+                target = $" on {targetObj}";
             }
 
-            string valueStr = value > 1 ? $\" (x{value})\" : \"\";
-            return $\"{name}{valueStr}{target}\";
+            string valueStr = value > 1 ? $" (x{value})" : "";
+            return $"{name}{valueStr}{target}";
         }
     }
 
@@ -822,8 +822,8 @@ namespace L5RGame
         {
             return skillType?.ToLower() switch
             {
-                \"military\" => militaryModifier,
-                \"political\" => politicalModifier,
+                "military" => militaryModifier,
+                "political" => politicalModifier,
                 _ => 0
             };
         }

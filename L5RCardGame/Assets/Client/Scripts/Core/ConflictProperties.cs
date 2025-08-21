@@ -12,54 +12,54 @@ namespace L5RGame
     [System.Serializable]
     public class ConflictProperties
     {
-        [Header(\"Conflict Type\")]
+        [Header("Conflict Type")]
         public List<string> type = new List<string>();
         public string forcedDeclaredType;
         public bool canSwitchType = true;
 
-        [Header(\"Ring Selection\")]
+        [Header("Ring Selection")]
         public List<Ring> ring = new List<Ring>();
         public string forcedRing;
         public bool canSwitchRing = true;
 
-        [Header(\"Province Target\")]
+        [Header("Province Target")]
         public List<BaseCard> province = new List<BaseCard>();
         public string forcedProvince;
         public bool canTargetAnyProvince = true;
 
-        [Header(\"Attacker Requirements\")]
+        [Header("Attacker Requirements")]
         public BaseCard attacker;
         public List<BaseCard> forcedAttackers = new List<BaseCard>();
         public List<BaseCard> additionalAttackers = new List<BaseCard>();
         public int minAttackers = 0;
         public int maxAttackers = -1; // -1 means unlimited
 
-        [Header(\"Defender Restrictions\")]
+        [Header("Defender Restrictions")]
         public List<BaseCard> forcedDefenders = new List<BaseCard>();
         public List<BaseCard> cannotDefend = new List<BaseCard>();
         public int minDefenders = 0;
         public int maxDefenders = -1; // -1 means unlimited
 
-        [Header(\"Skill Calculation\")]
+        [Header("Skill Calculation")]
         public bool unopposed = false;
         public bool forceUnopposed = false;
         public int skillModifier = 0;
         public System.Func<BaseCard, int> customSkillFunction;
 
-        [Header(\"Special Rules\")]
+        [Header("Special Rules")]
         public bool noSkillComparison = false;
         public bool cannotBeBroken = false;
         public bool mustBreak = false;
         public bool cannotResolveRingEffect = false;
         public bool mustResolveRingEffect = false;
 
-        [Header(\"Timing Restrictions\")]
+        [Header("Timing Restrictions")]
         public bool cannotPass = false;
         public bool mustDeclare = false;
         public bool skipActionWindow = false;
         public bool skipDefenderChoice = false;
 
-        [Header(\"Custom Properties\")]
+        [Header("Custom Properties")]
         public Dictionary<string, object> customProperties = new Dictionary<string, object>();
         public List<string> tags = new List<string>();
 
@@ -497,13 +497,13 @@ namespace L5RGame
             // Check minimum attackers
             if (selectedAttackers.Count < GetMinAttackers())
             {
-                result.AddError($\"Must select at least {GetMinAttackers()} attacker(s)\");
+                result.AddError($"Must select at least {GetMinAttackers()} attacker(s)");
             }
 
             // Check maximum attackers
             if (maxAttackers >= 0 && selectedAttackers.Count > maxAttackers)
             {
-                result.AddError($\"Cannot select more than {maxAttackers} attacker(s)\");
+                result.AddError($"Cannot select more than {maxAttackers} attacker(s)");
             }
 
             // Check required attackers
@@ -512,7 +512,7 @@ namespace L5RGame
             {
                 if (!selectedAttackers.Contains(required))
                 {
-                    result.AddError($\"{required.name} must be declared as an attacker\");
+                    result.AddError($"{required.name} must be declared as an attacker");
                 }
             }
 
@@ -521,7 +521,7 @@ namespace L5RGame
             {
                 if (!CanCardAttack(attacker))
                 {
-                    result.AddError($\"{attacker.name} cannot attack in this conflict\");
+                    result.AddError($"{attacker.name} cannot attack in this conflict");
                 }
             }
 
@@ -540,13 +540,13 @@ namespace L5RGame
             // Check minimum defenders
             if (selectedDefenders.Count < GetMinDefenders())
             {
-                result.AddError($\"Must select at least {GetMinDefenders()} defender(s)\");
+                result.AddError($"Must select at least {GetMinDefenders()} defender(s)");
             }
 
             // Check maximum defenders
             if (maxDefenders >= 0 && selectedDefenders.Count > maxDefenders)
             {
-                result.AddError($\"Cannot select more than {maxDefenders} defender(s)\");
+                result.AddError($"Cannot select more than {maxDefenders} defender(s)");
             }
 
             // Check forced defenders
@@ -556,7 +556,7 @@ namespace L5RGame
                 {
                     if (!selectedDefenders.Contains(forced))
                     {
-                        result.AddError($\"{forced.name} must be declared as a defender\");
+                        result.AddError($"{forced.name} must be declared as a defender");
                     }
                 }
             }
@@ -566,7 +566,7 @@ namespace L5RGame
             {
                 if (!CanCardDefend(defender))
                 {
-                    result.AddError($\"{defender.name} cannot defend in this conflict\");
+                    result.AddError($"{defender.name} cannot defend in this conflict");
                 }
             }
 
@@ -629,70 +629,70 @@ namespace L5RGame
 
             if (type.Count > 0)
             {
-                summary.Add($\"Type: {string.Join(\", \", type)}\");
+                summary.Add($"Type: {string.Join(", ", type)}");
             }
 
             if (!string.IsNullOrEmpty(forcedDeclaredType))
             {
-                summary.Add($\"Forced Type: {forcedDeclaredType}\");
+                summary.Add($"Forced Type: {forcedDeclaredType}");
             }
 
             if (ring.Count > 0)
             {
-                summary.Add($\"Ring: {string.Join(\", \", ring.Select(r => r.element))}\");
+                summary.Add($"Ring: {string.Join(", ", ring.Select(r => r.element))}");
             }
 
             if (!string.IsNullOrEmpty(forcedRing))
             {
-                summary.Add($\"Forced Ring: {forcedRing}\");
+                summary.Add($"Forced Ring: {forcedRing}");
             }
 
             if (attacker != null)
             {
-                summary.Add($\"Attacker: {attacker.name}\");
+                summary.Add($"Attacker: {attacker.name}");
             }
 
             if (forcedAttackers.Count > 0)
             {
-                summary.Add($\"Forced Attackers: {string.Join(\", \", forcedAttackers.Select(a => a.name))}\");
+                summary.Add($"Forced Attackers: {string.Join(", ", forcedAttackers.Select(a => a.name))}");
             }
 
             if (minAttackers > 0)
             {
-                summary.Add($\"Min Attackers: {minAttackers}\");
+                summary.Add($"Min Attackers: {minAttackers}");
             }
 
             if (maxAttackers >= 0)
             {
-                summary.Add($\"Max Attackers: {maxAttackers}\");
+                summary.Add($"Max Attackers: {maxAttackers}");
             }
 
             if (MustBeUnopposed())
             {
-                summary.Add(\"Must be unopposed\");
+                summary.Add("Must be unopposed");
             }
 
             if (noSkillComparison)
             {
-                summary.Add(\"No skill comparison\");
+                summary.Add("No skill comparison");
             }
 
             if (cannotBeBroken)
             {
-                summary.Add(\"Cannot be broken\");
+                summary.Add("Cannot be broken");
             }
 
             if (mustBreak)
             {
-                summary.Add(\"Must break province\");
+                summary.Add("Must break province");
             }
 
             if (tags.Count > 0)
             {
-                summary.Add($\"Tags: {string.Join(\", \", tags)}\");
+                summary.Add($"Tags: {string.Join(", ", tags)}");
             }
 
-            return summary.Count > 0 ? string.Join(\"; \", summary) : \"Standard conflict\";
+            return summary.Count > 0 ? string.Join("; ", summary) : "Standard conflict";
         }
 
         /// <summary>
@@ -727,14 +727,14 @@ namespace L5RGame
 
         public string GetErrorSummary()
         {
-            if (IsValid) return \"Valid\";
-            return $\"{errors.Count} error(s): {string.Join(\"; \", errors)}\";
+            if (IsValid) return "Valid";
+            return $"{errors.Count} error(s): {string.Join("; ", errors)}";
         }
 
         public string GetWarningSummary()
         {
-            if (!HasWarnings) return \"\";
-            return $\"{warnings.Count} warning(s): {string.Join(\"; \", warnings)}\";
+            if (!HasWarnings) return "";
+            return $"{warnings.Count} warning(s): {string.Join("; ", warnings)}";
         }
     }
 
@@ -848,7 +848,7 @@ namespace L5RGame
                 maxDefenders = 1,
                 skipActionWindow = true,
                 mustDeclare = true,
-                tags = new List<string> { \"duel\" }
+                tags = new List<string> { "duel" }
             };
         }
 

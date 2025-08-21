@@ -12,13 +12,13 @@ namespace L5RGame
     [System.Serializable]
     public class SelectCardPromptProperties
     {
-        [Header(\"Prompt Display\")]
+        [Header("Prompt Display")]
         public string activePromptTitle;
         public string waitingPromptTitle;
         public string promptDescription;
         public string source;
 
-        [Header(\"Selection Behavior\")]
+        [Header("Selection Behavior")]
         public bool selectCard = true;
         public bool selectRing = false;
         public bool selectPlayer = false;
@@ -26,7 +26,7 @@ namespace L5RGame
         public bool ordered = false;
         public bool optional = false;
 
-        [Header(\"Card Selection\")]
+        [Header("Card Selection")]
         public System.Func<BaseCard, AbilityContext, bool> cardCondition;
         public string cardType;
         public List<string> cardTypes = new List<string>();
@@ -37,20 +37,20 @@ namespace L5RGame
         public string cardLocation;
         public List<string> cardLocations = new List<string>();
 
-        [Header(\"Player Targeting\")]
+        [Header("Player Targeting")]
         public string controller = Players.Any;
         public string targetController = Players.Any;
         public bool onlyOwned = false;
         public bool onlyControlled = false;
 
-        [Header(\"Quantity\")]
+        [Header("Quantity")]
         public int numCards = 1;
         public int minCards = 0;
         public int maxCards = -1; // -1 means unlimited
         public bool exactlyVariable = false;
         public string numCardsVariable;
 
-        [Header(\"Card States\")]
+        [Header("Card States")]
         public bool canSelectFacedown = true;
         public bool canSelectFaceup = true;
         public bool canSelectBowed = true;
@@ -58,42 +58,42 @@ namespace L5RGame
         public bool canSelectHonored = true;
         public bool canSelectDishonored = true;
 
-        [Header(\"Context Requirements\")]
+        [Header("Context Requirements")]
         public bool requiresTarget = false;
         public bool multipleTargets = false;
         public List<BaseCard> mustSelect = new List<BaseCard>();
         public List<BaseCard> cannotSelect = new List<BaseCard>();
 
-        [Header(\"Callbacks\")]
+        [Header("Callbacks")]
         public System.Func<Player, object, bool> onSelect;
         public System.Func<Player, string, bool> onMenuCommand;
         public System.Func<Player, bool> onCancel;
         public System.Action<Player, BaseCard> onCardToggle;
 
-        [Header(\"UI Customization\")]
+        [Header("UI Customization")]
         public List<object> buttons = new List<object>();
         public List<object> controls = new List<object>();
         public bool showCancelButton = true;
         public bool showDoneButton = true;
-        public string doneButtonText = \"Done\";
-        public string cancelButtonText = \"Cancel\";
+        public string doneButtonText = "Done";
+        public string cancelButtonText = "Cancel";
 
-        [Header(\"Game Actions\")]
+        [Header("Game Actions")]
         public object gameAction;
         public List<GameAction> gameActions = new List<GameAction>();
 
-        [Header(\"Advanced Options\")]
+        [Header("Advanced Options")]
         public AbilityContext context;
         public BaseCardSelector selector;
         public Dictionary<string, object> customProperties = new Dictionary<string, object>();
         public List<string> tags = new List<string>();
 
-        [Header(\"Validation\")]
+        [Header("Validation")]
         public bool validateOnSelect = true;
         public System.Func<List<BaseCard>, string> customValidator;
         public bool allowEmptySelection = false;
 
-        [Header(\"Stat-Based Selection\")]
+        [Header("Stat-Based Selection")]
         public System.Func<AbilityContext, int> maxStat;
         public System.Func<BaseCard, int> cardStat;
         public bool useStatLimit = false;
@@ -405,17 +405,17 @@ namespace L5RGame
 
             if (selectedCards.Count < minRequired)
             {
-                result.AddError($\"Must select at least {minRequired} card(s)\");
+                result.AddError($"Must select at least {minRequired} card(s)");
             }
 
             if (maxAllowed >= 0 && selectedCards.Count > maxAllowed)
             {
-                result.AddError($\"Cannot select more than {maxAllowed} card(s)\");
+                result.AddError($"Cannot select more than {maxAllowed} card(s)");
             }
 
             if (RequiresExactCount() && selectedCards.Count != numCards)
             {
-                result.AddError($\"Must select exactly {numCards} card(s)\");
+                result.AddError($"Must select exactly {numCards} card(s)");
             }
 
             // Check that all must-select cards are included
@@ -423,14 +423,14 @@ namespace L5RGame
             {
                 if (!selectedCards.Contains(mustSelectCard))
                 {
-                    result.AddError($\"Must select {mustSelectCard.name}\");
+                    result.AddError($"Must select {mustSelectCard.name}");
                 }
             }
 
             // Check empty selection
             if (selectedCards.Count == 0 && !allowEmptySelection && !optional)
             {
-                result.AddError(\"Must select at least one card\");
+                result.AddError("Must select at least one card");
             }
 
             // Check stat limits
@@ -441,7 +441,7 @@ namespace L5RGame
                 
                 if (totalStat > maxStatValue)
                 {
-                    result.AddError($\"Total stat value ({totalStat}) exceeds maximum ({maxStatValue})\");
+                    result.AddError($"Total stat value ({totalStat}) exceeds maximum ({maxStatValue})");
                 }
             }
 
@@ -453,7 +453,7 @@ namespace L5RGame
                     bool canPerformAnyAction = gameActions.Any(action => action.CanAffect(card, context));
                     if (!canPerformAnyAction)
                     {
-                        result.AddError($\"{card.name} cannot be affected by the required game action(s)\");
+                        result.AddError($"{card.name} cannot be affected by the required game action(s)");
                     }
                 }
             }
@@ -481,14 +481,14 @@ namespace L5RGame
             {
                 if (GetMaxCards() >= 0)
                 {
-                    return $\"up to {GetMaxCards()}\";
+                    return $"up to {GetMaxCards()}";
                 }
-                return \"any number of\";
+                return "any number of";
             }
 
             if (RequiresExactCount())
             {
-                return numCards == 1 ? \"a\" : numCards.ToString();
+                return numCards == 1 ? "a" : numCards.ToString();
             }
 
             int min = GetMinCards();
@@ -496,15 +496,15 @@ namespace L5RGame
 
             if (max >= 0 && min == max)
             {
-                return min == 1 ? \"a\" : min.ToString();
+                return min == 1 ? "a" : min.ToString();
             }
 
             if (max >= 0)
             {
-                return $\"{min} to {max}\";
+                return $"{min} to {max}";
             }
 
-            return $\"at least {min}\";
+            return $"at least {min}";
         }
 
         /// <summary>
@@ -521,7 +521,7 @@ namespace L5RGame
             string countText = GetSelectionCountText();
             string cardText = GetCardTypeText();
 
-            return $\"Choose {countText} {cardText}\";
+            return $"Choose {countText} {cardText}";
         }
 
         /// <summary>
@@ -542,20 +542,20 @@ namespace L5RGame
 
             if (cardTypes.Count > 1)
             {
-                return string.Join(\" or \", cardTypes);
+                return string.Join(" or ", cardTypes);
             }
 
             if (!string.IsNullOrEmpty(cardTrait))
             {
-                return $\"{cardTrait} card\";
+                return $"{cardTrait} card";
             }
 
             if (cardTraits.Count > 0)
             {
-                return $\"{string.Join(\" or \", cardTraits)} card\";
+                return $"{string.Join(" or ", cardTraits)} card";
             }
 
-            return \"card\";
+            return "card";
         }
 
         /// <summary>
@@ -699,39 +699,39 @@ namespace L5RGame
 
             if (!string.IsNullOrEmpty(activePromptTitle))
             {
-                summary.Add($\"Title: {activePromptTitle}\");
+                summary.Add($"Title: {activePromptTitle}");
             }
 
             string countText = GetSelectionCountText();
             string cardText = GetCardTypeText();
-            summary.Add($\"Selection: {countText} {cardText}\");
+            summary.Add($"Selection: {countText} {cardText}");
 
             if (optional)
             {
-                summary.Add(\"Optional\");
+                summary.Add("Optional");
             }
 
             if (mustSelect.Count > 0)
             {
-                summary.Add($\"Must select: {string.Join(\", \", mustSelect.Select(c => c.name))}\");
+                summary.Add($"Must select: {string.Join(", ", mustSelect.Select(c => c.name))}");
             }
 
             if (cannotSelect.Count > 0)
             {
-                summary.Add($\"Cannot select: {string.Join(\", \", cannotSelect.Select(c => c.name))}\");
+                summary.Add($"Cannot select: {string.Join(", ", cannotSelect.Select(c => c.name))}");
             }
 
             if (useStatLimit)
             {
-                summary.Add(\"Stat-limited selection\");
+                summary.Add("Stat-limited selection");
             }
 
             if (tags.Count > 0)
             {
-                summary.Add($\"Tags: {string.Join(\", \", tags)}\");
+                summary.Add($"Tags: {string.Join(", ", tags)}");
             }
 
-            return summary.Count > 0 ? string.Join(\"; \", summary) : \"Basic card selection\";
+            return summary.Count > 0 ? string.Join("; ", summary) : "Basic card selection";
         }
 
         /// <summary>
@@ -766,14 +766,14 @@ namespace L5RGame
 
         public string GetErrorSummary()
         {
-            if (IsValid) return \"Valid\";
-            return $\"{errors.Count} error(s): {string.Join(\"; \", errors)}\";
+            if (IsValid) return "Valid";
+            return $"{errors.Count} error(s): {string.Join("; ", errors)}";
         }
 
         public string GetWarningSummary()
         {
-            if (!HasWarnings) return \"\";
-            return $\"{warnings.Count} warning(s): {string.Join(\"; \", warnings)}\";
+            if (!HasWarnings) return "";
+            return $"{warnings.Count} warning(s): {string.Join("; ", warnings)}";
         }
     }
 
@@ -787,7 +787,7 @@ namespace L5RGame
         /// </summary>
         /// <param name=\"title\">Prompt title</param>
         /// <returns>Single card selection properties</returns>
-        public static SelectCardPromptProperties CreateSingle(string title = \"Choose a card\")
+        public static SelectCardPromptProperties CreateSingle(string title = "Choose a card")
         {
             return new SelectCardPromptProperties(title, 1);
         }
@@ -800,7 +800,7 @@ namespace L5RGame
         /// <returns>Multiple card selection properties</returns>
         public static SelectCardPromptProperties CreateMultiple(int numCards, string title = null)
         {
-            title = title ?? $\"Choose {numCards} cards\";
+            title = title ?? $"Choose {numCards} cards";
             return new SelectCardPromptProperties(title, numCards);
         }
 
@@ -810,7 +810,7 @@ namespace L5RGame
         /// <param name=\"maxCards\">Maximum cards to select</param>
         /// <param name=\"title\">Prompt title</param>
         /// <returns>Optional selection properties</returns>
-        public static SelectCardPromptProperties CreateOptional(int maxCards = -1, string title = \"Choose cards (optional)\")
+        public static SelectCardPromptProperties CreateOptional(int maxCards = -1, string title = "Choose cards (optional)")
         {
             return new SelectCardPromptProperties(title, 0)
             {
@@ -827,7 +827,7 @@ namespace L5RGame
         /// <returns>Type-specific selection properties</returns>
         public static SelectCardPromptProperties CreateByType(string cardType, int numCards = 1)
         {
-            return new SelectCardPromptProperties($\"Choose {(numCards == 1 ? \"a\" : numCards.ToString())} {cardType}\", numCards)
+            return new SelectCardPromptProperties($"Choose {(numCards == 1 ? "a" : numCards.ToString())} {cardType}", numCards)
             {
                 cardType = cardType
             };
@@ -841,7 +841,7 @@ namespace L5RGame
         /// <returns>Trait-specific selection properties</returns>
         public static SelectCardPromptProperties CreateByTrait(string trait, int numCards = 1)
         {
-            return new SelectCardPromptProperties($\"Choose {(numCards == 1 ? \"a\" : numCards.ToString())} {trait} card\", numCards)
+            return new SelectCardPromptProperties($"Choose {(numCards == 1 ? "a" : numCards.ToString())} {trait} card", numCards)
             {
                 cardTrait = trait
             };
@@ -855,7 +855,7 @@ namespace L5RGame
         /// <returns>Location-specific selection properties</returns>
         public static SelectCardPromptProperties CreateFromLocation(string location, int numCards = 1)
         {
-            return new SelectCardPromptProperties($\"Choose {(numCards == 1 ? \"a\" : numCards.ToString())} card from {location}\", numCards)
+            return new SelectCardPromptProperties($"Choose {(numCards == 1 ? "a" : numCards.ToString())} card from {location}", numCards)
             {
                 cardLocation = location
             };
@@ -870,7 +870,7 @@ namespace L5RGame
         /// <returns>Stat-based selection properties</returns>
         public static SelectCardPromptProperties CreateStatBased(System.Func<AbilityContext, int> maxStatFunc, 
                                                                 System.Func<BaseCard, int> cardStatFunc, 
-                                                                string title = \"Choose cards\")
+                                                                string title = "Choose cards")
         {
             return new SelectCardPromptProperties(title, 0)
             {
