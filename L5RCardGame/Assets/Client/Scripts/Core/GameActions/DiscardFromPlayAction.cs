@@ -8,7 +8,7 @@ namespace L5RGame
     /// Discards cards from play (or sacrifices them)
     /// </summary>
     [System.Serializable]
-    public class DiscardFromPlayAction : CardGameAction
+    public partial class DiscardFromPlayAction : CardGameAction
     {
         [Header("Discard From Play Configuration")]
         [SerializeField] private bool isSacrifice = false;

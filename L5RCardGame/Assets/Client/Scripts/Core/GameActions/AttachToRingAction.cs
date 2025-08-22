@@ -8,7 +8,7 @@ namespace L5RGame
     /// Attaches a card to a ring
     /// </summary>
     [System.Serializable]
-    public class AttachToRingAction : CardGameAction
+    public partial class AttachToRingAction : CardGameAction
     {
         /// <summary>
         /// Properties specific to attach to ring actions

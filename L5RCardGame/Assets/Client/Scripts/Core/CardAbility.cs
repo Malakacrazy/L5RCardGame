@@ -710,66 +710,7 @@ namespace L5RGame
         // This is a placeholder for the full ThenAbility implementation
     }
 
-    /// <summary>
-    /// Manages ability limits (per turn, per round, etc.)
-    /// </summary>
-    [System.Serializable]
-    public class AbilityLimit
-    {
-        public int maxUses;
-        public string limitType; // "perTurn", "perRound", "perConflict", etc.
-        public Dictionary<Player, int> currentUses = new Dictionary<Player, int>();
-        public CardAbility ability;
 
-        public static AbilityLimit PerRound(int uses)
-        {
-            return new AbilityLimit { maxUses = uses, limitType = "perRound" };
-        }
-
-        public static AbilityLimit PerTurn(int uses)
-        {
-            return new AbilityLimit { maxUses = uses, limitType = "perTurn" };
-        }
-
-        public static AbilityLimit PerConflict(int uses)
-        {
-            return new AbilityLimit { maxUses = uses, limitType = "perConflict" };
-        }
-
-        public void RegisterEvents(Game game)
-        {
-            switch (limitType)
-            {
-                case "perRound":
-                    game.OnRoundEnded += () => currentUses.Clear();
-                    break;
-                case "perTurn":
-                    game.OnTurnEnded += () => currentUses.Clear();
-                    break;
-                case "perConflict":
-                    game.OnConflictEnded += () => currentUses.Clear();
-                    break;
-            }
-        }
-
-        public bool IsAtMax(Player player)
-        {
-            if (!currentUses.ContainsKey(player))
-            {
-                currentUses[player] = 0;
-            }
-            return currentUses[player] >= maxUses;
-        }
-
-        public void Increment(Player player)
-        {
-            if (!currentUses.ContainsKey(player))
-            {
-                currentUses[player] = 0;
-            }
-            currentUses[player]++;
-        }
-    }
 
     /// <summary>
     /// Target properties for ability targeting

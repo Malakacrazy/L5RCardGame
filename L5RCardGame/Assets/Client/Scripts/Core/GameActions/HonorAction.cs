@@ -8,7 +8,7 @@ namespace L5RGame
     /// Honors a character
     /// </summary>
     [System.Serializable]
-    public class HonorAction : CardGameAction
+    public partial class HonorAction : CardGameAction
     {
         /// <summary>
         /// Properties specific to honoring

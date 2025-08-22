@@ -8,7 +8,7 @@ namespace L5RGame
     /// Attaches one card to another (typically attachments to characters)
     /// </summary>
     [System.Serializable]
-    public class AttachAction : CardGameAction
+    public partial class AttachAction : CardGameAction
     {
         /// <summary>
         /// Properties specific to attach actions

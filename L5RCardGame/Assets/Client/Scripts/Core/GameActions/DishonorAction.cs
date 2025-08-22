@@ -8,7 +8,7 @@ namespace L5RGame
     /// Dishonors a character
     /// </summary>
     [System.Serializable]
-    public class DishonorAction : CardGameAction
+    public partial class DishonorAction : CardGameAction
     {
         /// <summary>
         /// Properties specific to dishonoring

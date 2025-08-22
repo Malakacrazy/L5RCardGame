@@ -8,7 +8,7 @@ namespace L5RGame
     /// Adds a token to a card
     /// </summary>
     [System.Serializable]
-    public class AddTokenAction : CardGameAction
+    public partial class AddTokenAction : CardGameAction
     {
         [Header("Add Token Configuration")]
         [SerializeField] private TokenTypes tokenType = TokenTypes.Honor;

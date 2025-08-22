@@ -8,7 +8,7 @@ namespace L5RGame
     /// Bows a character, attachment, or stronghold
     /// </summary>
     [System.Serializable]
-    public class BowAction : CardGameAction
+    public partial class BowAction : CardGameAction
     {
         /// <summary>
         /// Properties specific to bowing

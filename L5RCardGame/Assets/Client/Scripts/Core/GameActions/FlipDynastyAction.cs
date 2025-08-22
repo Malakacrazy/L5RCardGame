@@ -8,7 +8,7 @@ namespace L5RGame
     /// Flips dynasty cards face up
     /// </summary>
     [System.Serializable]
-    public class FlipDynastyAction : CardGameAction
+    public partial class FlipDynastyAction : CardGameAction
     {
         /// <summary>
         /// Properties specific to flipping dynasty cards

@@ -10,7 +10,7 @@ namespace L5RGame
     {
     }
 
-    public class ReturnRingAction : RingAction
+    public partial class ReturnRingAction : RingAction
     {
         public override string Name => "returnRing";
         public override string EventName => EventNames.OnReturnRing;

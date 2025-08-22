@@ -3,29 +3,29 @@ using System.Collections.Generic;
 
 namespace L5RGame
 {
-    // Enums instead of static classes to avoid CS0721/CS0722 errors
-    public enum Locations
+    // Location constants
+    public static class Locations
     {
-        PlayArea,
-        Hand,
-        ConflictDeck,
-        DynastyDeck,
-        ConflictDiscardPile,
-        DynastyDiscardPile,
-        ProvinceOne,
-        ProvinceTwo,
-        ProvinceThree,
-        ProvinceFour,
-        StrongholdProvince,
-        Provinces,
-        RemovedFromGame,
-        BeingPlayed,
-        Any,
-        Role,
-        ConflictDeckTop
+        public const string PlayArea = "play area";
+        public const string Hand = "hand";
+        public const string ConflictDeck = "conflict deck";
+        public const string DynastyDeck = "dynasty deck";
+        public const string ConflictDiscardPile = "conflict discard pile";
+        public const string DynastyDiscardPile = "dynasty discard pile";
+        public const string ProvinceOne = "province 1";
+        public const string ProvinceTwo = "province 2";
+        public const string ProvinceThree = "province 3";
+        public const string ProvinceFour = "province 4";
+        public const string StrongholdProvince = "stronghold province";
+        public const string Provinces = "provinces";
+        public const string RemovedFromGame = "removed from game";
+        public const string BeingPlayed = "being played";
+        public const string Any = "any";
+        public const string Role = "role";
+        public const string ConflictDeckTop = "conflict deck top";
     }
 
-    public partial class EffectNames
+    public static class EffectNames
     {
         public const string ModifyMilitarySkill = "modifyMilitarySkill";
         public const string ModifyPoliticalSkill = "modifyPoliticalSkill";
@@ -65,72 +65,63 @@ namespace L5RGame
         public const string ForceConflictUnopposed = "forceConflictUnopposed";
         public const string AdditionalCardPlayed = "additionalCardPlayed";
         public const string AdditionalCharactersInConflict = "additionalCharactersInConflict";
-        // Add more as needed
     }
 
-    public enum Durations
+    public static class Durations
     {
-        UntilEndOfConflict,
-        UntilEndOfPhase,
-        UntilEndOfRound,
-        UntilEndOfDuel,
-        Persistent,
-        UntilPassPriority,
-        UntilOpponentPassPriority,
-        UntilNextPassPriority,
-        Custom
+        public const string UntilEndOfConflict = "untilEndOfConflict";
+        public const string UntilEndOfPhase = "untilEndOfPhase";
+        public const string UntilEndOfRound = "untilEndOfRound";
+        public const string UntilEndOfDuel = "untilEndOfDuel";
+        public const string Persistent = "persistent";
+        public const string UntilPassPriority = "untilPassPriority";
+        public const string UntilOpponentPassPriority = "untilOpponentPassPriority";
+        public const string UntilNextPassPriority = "untilNextPassPriority";
+        public const string Custom = "custom";
     }
 
-    public enum Stages
+    public static class Players
     {
-        PreConflict,
-        DuringConflict,
-        PostConflict,
-        Any
+        public const string Self = "self";
+        public const string Opponent = "opponent";
+        public const string Any = "any";
+        public const string Both = "both";
+        public const string Attacker = "attacker";
+        public const string Defender = "defender";
     }
 
-    public enum Players
+    public static class PlayTypes
     {
-        Self,
-        Opponent,
-        Any,
-        Both,
-        Attacker,
-        Defender
+        public const string PlayFromHand = "playFromHand";
+        public const string PlayFromProvince = "playFromProvince";
+        public const string PlayFromOwned = "playFromOwned";
+        public const string Other = "other";
     }
 
-    public enum PlayTypes
+    public static class CardTypes
     {
-        PlayFromHand,
-        PlayFromProvince,
-        PlayFromOwned,
-        Other
+        public const string Character = "character";
+        public const string Event = "event";
+        public const string Attachment = "attachment";
+        public const string Holding = "holding";
+        public const string Province = "province";
+        public const string Stronghold = "stronghold";
+        public const string Role = "role";
     }
 
-    public enum CardTypes
+    public static class AbilityTypes
     {
-        Character,
-        Event,
-        Attachment,
-        Holding,
-        Province,
-        Stronghold,
-        Role
+        public const string Action = "action";
+        public const string Reaction = "reaction";
+        public const string Interrupt = "interrupt";
+        public const string ForcedReaction = "forcedReaction";
+        public const string ForcedInterrupt = "forcedInterrupt";
+        public const string Persistent = "persistent";
+        public const string WouldInterrupt = "wouldInterrupt";
+        public const string OtherEffects = "otherEffects";
     }
 
-    public enum AbilityTypes
-    {
-        Action,
-        Reaction,
-        Interrupt,
-        ForcedReaction,
-        ForcedInterrupt,
-        Persistent,
-        WouldInterrupt,
-        OtherEffects
-    }
-
-    public partial class EventNames
+    public static class EventNames
     {
         public const string Unnamed = "Unnamed";
         public const string OnPhaseStarted = "onPhaseStarted";
@@ -146,30 +137,34 @@ namespace L5RGame
         public const string OnFateCollected = "onFateCollected";
         public const string OnPassActionPhasePriority = "onPassActionPhasePriority";
         public const string OnEffectApplied = "onEffectApplied";
-        // Add more as needed
+        public const string OnCardBowed = "onCardBowed";
+        public const string OnCardHonored = "onCardHonored";
+        public const string OnCardDishonored = "onCardDishonored";
+        public const string OnBreakProvince = "onBreakProvince";
+        public const string OnAddTokenToCard = "onAddTokenToCard";
+        public const string OnCardAttached = "onCardAttached";
+        public const string OnCreateToken = "onCreateToken";
+        public const string OnDynastyCardTurnedFaceup = "onDynastyCardTurnedFaceup";
+        public const string OnDuelInitiated = "onDuelInitiated";
+        public const string OnCancel = "onCancel";
     }
 
-    public enum ConflictTypes
+    public static class ConflictTypes
     {
-        Military,
-        Political
+        public const string Military = "military";
+        public const string Political = "political";
     }
 
-    public enum DuelTypes
+    public static class DuelTypes
     {
-        Military,
-        Political
+        public const string Military = "military";
+        public const string Political = "political";
     }
 
-    public enum Decks
+    public static class Decks
     {
-        ConflictDeck,
-        DynastyDeck
-    }
-
-    public static class GameActions
-    {
-        // Define any game action constants here
+        public const string ConflictDeck = "conflict deck";
+        public const string DynastyDeck = "dynasty deck";
     }
 
     public static class TargetModes
@@ -186,8 +181,23 @@ namespace L5RGame
     public static class TokenTypes
     {
         public const string Honor = "honor";
+        public const string Dishonor = "dishonor";
         public const string Fate = "fate";
         public const string Status = "status";
         public const string Conflict = "conflict";
+    }
+
+    public static class Stages
+    {
+        public const string PreConflict = "preConflict";
+        public const string DuringConflict = "duringConflict";
+        public const string PostConflict = "postConflict";
+        public const string Any = "any";
+    }
+
+    public static class Effects
+    {
+        // Dynamic effects container
+        public static Dictionary<string, object> AllEffects = new Dictionary<string, object>();
     }
 }

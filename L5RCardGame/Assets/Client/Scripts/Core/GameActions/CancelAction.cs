@@ -8,7 +8,7 @@ namespace L5RGame
     /// Cancels an event or ability, optionally replacing it with another action
     /// </summary>
     [System.Serializable]
-    public class CancelAction : GameAction
+    public partial class CancelAction : GameAction
     {
         /// <summary>
         /// Properties specific to cancel actions

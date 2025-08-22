@@ -56,7 +56,7 @@ namespace L5RGame
     /// Base class for all abilities
     /// </summary>
     [Serializable]
-    public abstract partial class BaseAbility
+    public abstract class BaseAbility
     {
         public string id;
         public string title;
@@ -159,7 +159,7 @@ namespace L5RGame
     /// Simple step implementation
     /// </summary>
     [Serializable]
-    public partial class SimpleStep : IGameStep
+    public class SimpleStep : IGameStep
     {
         protected string name;
         protected System.Action executeAction;
@@ -271,23 +271,6 @@ namespace L5RGame
         {
             // Override in derived classes
         }
-    }
-
-    /// <summary>
-    /// Game event interface
-    /// </summary>
-    public interface IGameEvent
-    {
-        BaseCard Card { get; set; }
-        Ring Ring { get; set; }
-        string Phase { get; set; }
-        AbilityContext Context { get; set; }
-        
-        void Cancel();
-        IGameEvent GetResolutionEvent();
-        bool IsCancelled();
-        bool IsResolved();
-        void Execute();
     }
 
     /// <summary>

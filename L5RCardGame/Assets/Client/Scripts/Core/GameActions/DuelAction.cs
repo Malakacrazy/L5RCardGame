@@ -9,7 +9,7 @@ namespace L5RGame
     /// Initiates a duel between characters
     /// </summary>
     [System.Serializable]
-    public class DuelAction : CardGameAction
+    public partial class DuelAction : CardGameAction
     {
         /// <summary>
         /// Properties specific to duels

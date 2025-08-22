@@ -9,7 +9,7 @@ namespace L5RGame
     /// Discards cards from hand or other locations
     /// </summary>
     [System.Serializable]
-    public class DiscardCardAction : CardGameAction
+    public partial class DiscardCardAction : CardGameAction
     {
         /// <summary>
         /// Properties specific to discarding cards

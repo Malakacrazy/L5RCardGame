@@ -8,7 +8,7 @@ namespace L5RGame
     /// Removes fate from a character
     /// </summary>
     [System.Serializable]
-    public class RemoveFateAction : CardGameAction
+    public partial class RemoveFateAction : CardGameAction
     {
         /// <summary>
         /// Properties specific to removing fate

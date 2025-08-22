@@ -9,7 +9,7 @@ namespace L5RGame
     /// Base class for actions that target cards
     /// </summary>
     [System.Serializable]
-    public abstract class CardGameAction : GameAction
+    public partial class CardGameAction : GameAction
     {
         /// <summary>
         /// Properties for card-targeted actions

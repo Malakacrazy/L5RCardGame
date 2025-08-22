@@ -8,7 +8,7 @@ namespace L5RGame
     /// Breaks a province card
     /// </summary>
     [System.Serializable]
-    public class BreakAction : CardGameAction
+    public partial class BreakAction : CardGameAction
     {
         /// <summary>
         /// Properties specific to breaking provinces

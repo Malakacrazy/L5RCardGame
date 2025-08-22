@@ -8,7 +8,7 @@ namespace L5RGame
     /// Creates a token copy of a character card during military conflicts
     /// </summary>
     [System.Serializable]
-    public class CreateTokenAction : CardGameAction
+    public partial class CreateTokenAction : CardGameAction
     {
         /// <summary>
         /// Properties specific to creating tokens

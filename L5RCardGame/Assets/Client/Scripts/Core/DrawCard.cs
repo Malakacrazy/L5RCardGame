@@ -1157,27 +1157,5 @@ namespace L5RGame
         public string stat = "0";
         public List<StatModifier> modifiers = new List<StatModifier>();
     }
-
-    [System.Serializable]
-    public class StatusToken
-    {
-        public Game game;
-        public DrawCard card;
-        public bool honored;
-        public bool dishonored;
-
-        public StatusToken(Game game, DrawCard card, bool isHonored)
-        {
-            this.game = game;
-            this.card = card;
-            this.honored = isHonored;
-            this.dishonored = !isHonored;
-        }
-
-        public void SetCard(DrawCard newCard)
-        {
-            card = newCard;
-        }
-    }
     #endregion
 }

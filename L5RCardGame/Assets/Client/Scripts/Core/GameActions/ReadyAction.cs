@@ -8,7 +8,7 @@ namespace L5RGame
     /// Readies a character, attachment, or stronghold
     /// </summary>
     [System.Serializable]
-    public class ReadyAction : CardGameAction
+    public partial class ReadyAction : CardGameAction
     {
         /// <summary>
         /// Properties specific to readying

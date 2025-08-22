@@ -549,40 +549,16 @@ namespace L5RGame
         public string location;
     }
 
-    /// <summary>
-    /// Stages of ability execution
-    /// </summary>
-    public static class Stages
-    {
-        public const string PreTarget = "preTarget";
-        public const string Target = "target";
-        public const string Cost = "cost";
-        public const string Effect = "effect";
-        public const string PostEffect = "postEffect";
-    }
 
-    /// <summary>
-    /// Play types for different card locations
-    /// </summary>
-    public static class PlayTypes
-    {
-        public const string PlayFromHand = "playFromHand";
-        public const string PlayFromProvince = "playFromProvince";
-        public const string PlayFromDiscard = "playFromDiscard";
-        public const string PlayFromDeck = "playFromDeck";
-    }
 
     /// <summary>
     /// Base ability class (placeholder for ability system)
     /// </summary>
-    public class BaseAbility
+    public partial class BaseAbility
     {
         public string title = "";
-        public int defaultPriority = 0;
-        public object limit;
-        public object cost;
-        public object target;
-        public object effect;
+        public AbilityLimit limit;
+        public List<ICost> cost;
 
         public BaseAbility() { }
         
@@ -592,20 +568,16 @@ namespace L5RGame
             if (properties.ContainsKey("title"))
                 title = properties["title"] as string;
             if (properties.ContainsKey("limit"))
-                limit = properties["limit"];
+                limit = properties["limit"] as AbilityLimit;
             if (properties.ContainsKey("cost"))
-                cost = properties["cost"];
-            if (properties.ContainsKey("target"))
-                target = properties["target"];
-            if (properties.ContainsKey("effect"))
-                effect = properties["effect"];
+                cost = properties["cost"] as List<ICost>;
         }
     }
 
     /// <summary>
     /// Game action base class (placeholder)
     /// </summary>
-    public class GameAction
+    public partial class GameAction
     {
         public string actionType;
         public object target;
@@ -613,16 +585,6 @@ namespace L5RGame
 
         public virtual bool CanExecute(AbilityContext context) { return true; }
         public virtual void Execute(AbilityContext context) { }
-    }
-
-    /// <summary>
-    /// Status token class (placeholder)
-    /// </summary>
-    public class StatusToken
-    {
-        public string type;
-        public object value;
-        public BaseCard attachedTo;
     }
 
     /// <summary>
