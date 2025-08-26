@@ -599,13 +599,13 @@ namespace L5RGame
     /// <summary>
     /// Specific card types for L5R
     /// </summary>
-    public class DrawCard : BaseCard
+    public partial class DrawCard : BaseCard
     {
         // Default implementation for most cards
         // Specific cards can inherit from this and override behavior
     }
 
-    public class ProvinceCard : BaseCard
+    public partial class ProvinceCard : BaseCard
     {
         [Header("Province Specific")]
         public int strength;
@@ -631,7 +631,7 @@ namespace L5RGame
         }
     }
 
-    public class StrongholdCard : BaseCard
+    public partial class StrongholdCard : BaseCard
     {
         [Header("Stronghold Specific")]
         public int startingHonor;
@@ -658,7 +658,7 @@ namespace L5RGame
         }
     }
 
-    public class RoleCard : BaseCard
+    public partial class RoleCard : BaseCard
     {
         [Header("Role Specific")]
         public List<string> traits = new List<string>();

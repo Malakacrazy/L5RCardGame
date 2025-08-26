@@ -10,7 +10,7 @@ namespace L5RGame
     {
     }
 
-    public class DiscardFavorAction : PlayerAction
+    public partial class DiscardFavorAction : PlayerAction
     {
         public override string Name => "discardFavor";
         public override string EventName => EventNames.OnDiscardFavor;

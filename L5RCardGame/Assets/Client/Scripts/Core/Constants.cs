@@ -25,7 +25,7 @@ namespace L5RGame
         public const string ConflictDeckTop = "conflict deck top";
     }
 
-    public static class EffectNames
+    public static partial class EffectNames
     {
         public const string ModifyMilitarySkill = "modifyMilitarySkill";
         public const string ModifyPoliticalSkill = "modifyPoliticalSkill";
@@ -67,7 +67,7 @@ namespace L5RGame
         public const string AdditionalCharactersInConflict = "additionalCharactersInConflict";
     }
 
-    public static class Durations
+    public static partial class Durations
     {
         public const string UntilEndOfConflict = "untilEndOfConflict";
         public const string UntilEndOfPhase = "untilEndOfPhase";
@@ -121,7 +121,7 @@ namespace L5RGame
         public const string OtherEffects = "otherEffects";
     }
 
-    public static class EventNames
+    public static partial class EventNames
     {
         public const string Unnamed = "Unnamed";
         public const string OnPhaseStarted = "onPhaseStarted";

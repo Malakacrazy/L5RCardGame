@@ -29,8 +29,8 @@ namespace L5RGame
         
         // Event relationships
         protected EventWindow eventWindow;
-        protected AbilityContext context;
-        protected GameEvent replacementEvent;
+        protected AbilityContext contextObject;
+        protected GameEvent replacementEventObject;
         
         // Event metadata
         protected DateTime createdTime;
@@ -132,8 +132,8 @@ namespace L5RGame
         /// </summary>
         public AbilityContext context
         {
-            get => context;
-            set => context = value;
+            get => contextObject;
+            set => contextObject = value;
         }
         
         /// <summary>
@@ -141,8 +141,8 @@ namespace L5RGame
         /// </summary>
         public GameEvent replacementEvent
         {
-            get => replacementEvent;
-            set => replacementEvent = value;
+            get => replacementEventObject;
+            set => replacementEventObject = value;
         }
         
         /// <summary>
@@ -429,8 +429,8 @@ namespace L5RGame
                 return;
             }
             
-            replacementEvent = newEvent;
-            newEvent.context = context;
+            replacementEventObject = newEvent;
+            newEvent.context = contextObject;
             newEvent.window = eventWindow;
             
             LogEvent($"Event {name} replaced with {newEvent.name}");
@@ -675,8 +675,13 @@ namespace L5RGame
         #region IGameEvent Implementation
         
         public string Name => name;
-        public bool IsCancelled() => cancelled;
-        public bool IsResolved() => resolved;
+        public BaseCard Card => GetProperty("card") as BaseCard;
+        public Ring Ring => GetProperty("ring") as Ring;
+        public string Phase => GetProperty("phase") as string;
+        public AbilityContext Context => context;
+        public bool cancelled { get => isCancelled; set => isCancelled = value; }
+        public bool IsCancelled() => isCancelled;
+        public bool IsResolved() => isResolved;
         public void Execute() => ExecuteHandler();
         
         #endregion
@@ -773,16 +778,7 @@ namespace L5RGame
         #endregion
     }
     
-    /// <summary>
-    /// Interface for game events
-    /// </summary>
-    public interface IGameEvent
-    {
-        string Name { get; }
-        bool IsCancelled();
-        bool IsResolved();
-        void Execute();
-    }
+
     
     /// <summary>
     /// Extension methods for GameEvent

@@ -10,7 +10,7 @@ namespace L5RGame
     /// Role cards have restricted actions and cannot be manipulated like normal cards.
     /// </summary>
     [System.Serializable]
-    public class RoleCard : BaseCard
+    public partial class RoleCard : BaseCard
     {
         [Header("Role Properties")]
         public bool isRole = true;

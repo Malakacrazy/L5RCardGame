@@ -9,7 +9,7 @@ namespace L5RGame
     /// Player searches their deck for cards
     /// </summary>
     [System.Serializable]
-    public class DeckSearchAction : PlayerAction
+    public partial class DeckSearchAction : PlayerAction
     {
         /// <summary>
         /// Properties specific to deck search

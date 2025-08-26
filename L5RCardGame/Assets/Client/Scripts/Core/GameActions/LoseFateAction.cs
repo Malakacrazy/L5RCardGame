@@ -8,7 +8,7 @@ namespace L5RGame
     /// Player loses fate
     /// </summary>
     [System.Serializable]
-    public class LoseFateAction : PlayerAction
+    public partial class LoseFateAction : PlayerAction
     {
         /// <summary>
         /// Properties specific to losing fate

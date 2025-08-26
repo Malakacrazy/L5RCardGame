@@ -9,7 +9,7 @@ namespace L5RGame
     /// Player chooses cards to discard from hand
     /// </summary>
     [System.Serializable]
-    public class ChosenDiscardAction : PlayerAction
+    public partial class ChosenDiscardAction : PlayerAction
     {
         /// <summary>
         /// Properties specific to chosen discard

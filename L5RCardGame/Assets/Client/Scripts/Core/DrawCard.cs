@@ -11,7 +11,7 @@ namespace L5RGame
     /// This includes Characters, Attachments, Events, and Holdings with complex skill calculations.
     /// </summary>
     [System.Serializable]
-    public class DrawCard : BaseCard
+    public partial class DrawCard : BaseCard
     {
         [Header("Printed Stats")]
         public int printedMilitarySkill;

@@ -8,7 +8,7 @@ namespace L5RGame
     /// Places fate on a character
     /// </summary>
     [System.Serializable]
-    public class PlaceFateAction : CardGameAction
+    public partial class PlaceFateAction : CardGameAction
     {
         /// <summary>
         /// Properties specific to placing fate

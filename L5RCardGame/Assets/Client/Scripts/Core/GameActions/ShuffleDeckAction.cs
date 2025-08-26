@@ -8,7 +8,7 @@ namespace L5RGame
     /// Shuffles a player's deck
     /// </summary>
     [System.Serializable]
-    public class ShuffleDeckAction : PlayerAction
+    public partial class ShuffleDeckAction : PlayerAction
     {
         /// <summary>
         /// Properties specific to shuffling decks

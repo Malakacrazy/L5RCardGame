@@ -6,21 +6,30 @@ using UnityEngine;
 namespace L5RGame
 {
     /// <summary>
-    /// Interface for all game steps that can be executed in the pipeline
+    /// Interface for game steps that can be executed in the pipeline
     /// </summary>
     public interface IGameStep
     {
         /// <summary>
-        /// Execute this step. Return false to pause pipeline execution.
+        /// Execute this step
         /// </summary>
         /// <returns>True to continue to next step, false to pause pipeline</returns>
-        bool Continue();
+        bool Execute();
 
         /// <summary>
         /// Check if this step is complete
         /// </summary>
-        /// <returns>True if step is complete</returns>
-        bool IsComplete();
+        bool IsComplete { get; }
+        
+        /// <summary>
+        /// Check if this step can be cancelled
+        /// </summary>
+        bool CanCancel { get; }
+
+        /// <summary>
+        /// Continue execution of this step
+        /// </summary>
+        void Continue();
 
         /// <summary>
         /// Cancel this step if possible
@@ -30,40 +39,27 @@ namespace L5RGame
         /// <summary>
         /// Queue a sub-step within this step
         /// </summary>
-        /// <param name="step">Step to queue</param>
         void QueueStep(IGameStep step);
 
         /// <summary>
         /// Handle card being clicked
         /// </summary>
-        /// <param name="player">Player who clicked</param>
-        /// <param name="card">Card that was clicked</param>
-        /// <returns>True if handled, false otherwise</returns>
-        bool OnCardClicked(Player player, BaseCard card);
+        void OnCardClicked(Player player, BaseCard card);
 
         /// <summary>
         /// Handle ring being clicked
         /// </summary>
-        /// <param name="player">Player who clicked</param>
-        /// <param name="ring">Ring that was clicked</param>
-        /// <returns>True if handled, false otherwise</returns>
-        bool OnRingClicked(Player player, Ring ring);
+        void OnRingClicked(Player player, Ring ring);
 
         /// <summary>
         /// Handle menu command
         /// </summary>
-        /// <param name="player">Player who issued command</param>
-        /// <param name="arg">Command argument</param>
-        /// <param name="uuid">Object UUID</param>
-        /// <param name="method">Method name</param>
-        /// <returns>True if handled, false otherwise</returns>
-        bool OnMenuCommand(Player player, string arg, string uuid, string method);
+        void OnMenuCommand(Player player, string command, string arg1, string arg2);
 
         /// <summary>
         /// Get debug information about this step
         /// </summary>
-        /// <returns>Debug info object</returns>
-        object GetDebugInfo();
+        string GetDebugInfo();
 
         /// <summary>
         /// Get the name of this step for debugging
@@ -225,32 +221,32 @@ namespace L5RGame
 
             try
             {
-                if (step.IsComplete())
+                if (step.IsComplete)
                 {
-                    // Step is already complete, just remove it
-                    pipeline.RemoveAt(0);
-                    
-                    if (enableStepTracing)
-                        Debug.Log($"🔄 Completed step removed: {step.StepName}");
+                // Step is already complete, just remove it
+                pipeline.RemoveAt(0);
+                
+                if (enableStepTracing)
+                Debug.Log($"🔄 Completed step removed: {step.StepName}");
                 }
                 else
                 {
-                    // Try to cancel the step
-                    step.CancelStep();
-                    
-                    // Check if cancellation completed the step
-                    if (step.IsComplete())
-                    {
-                        pipeline.RemoveAt(0);
-                        
-                        if (enableStepTracing)
-                            Debug.Log($"🔄 Step cancelled and removed: {step.StepName}");
-                    }
-                    else
-                    {
-                        if (enableStepTracing)
-                            Debug.Log($"🔄 Step cancelled but not complete: {step.StepName}");
-                    }
+                // Try to cancel the step
+                step.CancelStep();
+                
+                // Check if cancellation completed the step
+                if (step.IsComplete)
+                {
+                pipeline.RemoveAt(0);
+                
+                if (enableStepTracing)
+                Debug.Log($"🔄 Step cancelled and removed: {step.StepName}");
+                }
+                else
+                {
+                if (enableStepTracing)
+                Debug.Log($"🔄 Step cancelled but not complete: {step.StepName}");
+                }
                 }
             }
             catch (Exception e)
@@ -323,11 +319,11 @@ namespace L5RGame
         /// Handle menu command events
         /// </summary>
         /// <param name="player">Player who issued command</param>
-        /// <param name="arg">Command argument</param>
-        /// <param name="uuid">Object UUID</param>
-        /// <param name="method">Method name</param>
+        /// <param name="command">Command</param>
+        /// <param name="arg1">First argument</param>
+        /// <param name="arg2">Second argument</param>
         /// <returns>True if handled by current step</returns>
-        public bool HandleMenuCommand(Player player, string arg, string uuid, string method)
+        public bool HandleMenuCommand(Player player, string command, string arg1, string arg2)
         {
             if (pipeline.Count == 0) return false;
 
@@ -336,10 +332,10 @@ namespace L5RGame
 
             try
             {
-                bool handled = step.OnMenuCommand(player, arg, uuid, method);
+                bool handled = step.OnMenuCommand(player, command, arg1, arg2);
                 
                 if (enableStepTracing && handled)
-                    Debug.Log($"🔄 Menu command handled by {step.StepName}: {method}");
+                    Debug.Log($"🔄 Menu command handled by {step.StepName}: {command}");
                 
                 return handled;
             }
@@ -655,10 +651,7 @@ namespace L5RGame
 
         public abstract bool Continue();
 
-        public virtual bool IsComplete()
-        {
-            return completed;
-        }
+        public virtual bool IsComplete => completed;
 
         public virtual void CancelStep()
         {
@@ -680,19 +673,14 @@ namespace L5RGame
             return false; // Not handled by default
         }
 
-        public virtual bool OnMenuCommand(Player player, string arg, string uuid, string method)
+        public virtual bool OnMenuCommand(Player player, string command, string arg1, string arg2)
         {
             return false; // Not handled by default
         }
 
-        public virtual object GetDebugInfo()
+        public virtual string GetDebugInfo()
         {
-            return new
-            {
-                stepType = StepName,
-                completed = completed,
-                gamePhase = game.currentPhase
-            };
+            return $"{StepName} (completed: {completed}, phase: {game.currentPhase})";
         }
     }
 
@@ -730,14 +718,9 @@ namespace L5RGame
             }
         }
 
-        public override object GetDebugInfo()
+        public override string GetDebugInfo()
         {
-            return new
-            {
-                stepType = StepName,
-                completed = completed,
-                hasAction = action != null
-            };
+            return $"{StepName} (completed: {completed}, hasAction: {action != null})";
         }
     }
 

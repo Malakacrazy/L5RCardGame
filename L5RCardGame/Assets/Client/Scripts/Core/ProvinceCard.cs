@@ -10,7 +10,7 @@ namespace L5RGame
     /// Provinces have strength values and elements, and can be defended by dynasty cards.
     /// </summary>
     [System.Serializable]
-    public class ProvinceCard : BaseCard
+    public partial class ProvinceCard : BaseCard
     {
         [Header("Province Properties")]
         public bool isProvince = true;

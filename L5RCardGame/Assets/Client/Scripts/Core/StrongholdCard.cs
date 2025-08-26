@@ -10,7 +10,7 @@ namespace L5RGame
     /// honor, influence, and province strength. It can be bowed to generate additional effects.
     /// </summary>
     [System.Serializable]
-    public class StrongholdCard : BaseCard
+    public partial class StrongholdCard : BaseCard
     {
         [Header("Stronghold Properties")]
         public bool isStronghold = true;

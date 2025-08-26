@@ -8,7 +8,7 @@ namespace L5RGame
     /// Player gains honor
     /// </summary>
     [System.Serializable]
-    public class GainHonorAction : PlayerAction
+    public partial class GainHonorAction : PlayerAction
     {
         /// <summary>
         /// Properties specific to gaining honor

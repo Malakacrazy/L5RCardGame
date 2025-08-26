@@ -9,10 +9,7 @@ namespace L5RGame
     
     #region Card Actions
     
-    public partial class DrawCard : BaseCard { }
-    public partial class ProvinceCard : BaseCard { }
-    public partial class StrongholdCard : BaseCard { }
-    public partial class RoleCard : BaseCard { }
+    // Note: These partial declarations are defined in their respective main files
     
     public partial class PlayCardAction : CardGameAction
     {
@@ -193,112 +190,112 @@ namespace L5RGame
     
     #region Player Actions
     
-    public partial class DrawAction : PlayerGameAction
+    public partial class DrawAction : PlayerAction
     {
         public DrawAction() : base() { }
         public DrawAction(PlayerActionProperties properties) : base(properties) { }
         public DrawAction(Func<AbilityContext, PlayerActionProperties> factory) : base(factory) { }
     }
     
-    public partial class GainFateAction : PlayerGameAction
+    public partial class GainFateAction : PlayerAction
     {
         public GainFateAction() : base() { }
         public GainFateAction(PlayerActionProperties properties) : base(properties) { }
         public GainFateAction(Func<AbilityContext, PlayerActionProperties> factory) : base(factory) { }
     }
     
-    public partial class LoseFateAction : PlayerGameAction
+    public partial class LoseFateAction : PlayerAction
     {
         public LoseFateAction() : base() { }
         public LoseFateAction(PlayerActionProperties properties) : base(properties) { }
         public LoseFateAction(Func<AbilityContext, PlayerActionProperties> factory) : base(factory) { }
     }
     
-    public partial class GainHonorAction : PlayerGameAction
+    public partial class GainHonorAction : PlayerAction
     {
         public GainHonorAction() : base() { }
         public GainHonorAction(PlayerActionProperties properties) : base(properties) { }
         public GainHonorAction(Func<AbilityContext, PlayerActionProperties> factory) : base(factory) { }
     }
     
-    public partial class LoseHonorAction : PlayerGameAction
+    public partial class LoseHonorAction : PlayerAction
     {
         public LoseHonorAction() : base() { }
         public LoseHonorAction(PlayerActionProperties properties) : base(properties) { }
         public LoseHonorAction(Func<AbilityContext, PlayerActionProperties> factory) : base(factory) { }
     }
     
-    public partial class ModifyBidAction : PlayerGameAction
+    public partial class ModifyBidAction : PlayerAction
     {
         public ModifyBidAction() : base() { }
         public ModifyBidAction(PlayerActionProperties properties) : base(properties) { }
         public ModifyBidAction(Func<AbilityContext, PlayerActionProperties> factory) : base(factory) { }
     }
     
-    public partial class SetDialAction : PlayerGameAction
+    public partial class SetDialAction : PlayerAction
     {
         public SetDialAction() : base() { }
         public SetDialAction(PlayerActionProperties properties) : base(properties) { }
         public SetDialAction(Func<AbilityContext, PlayerActionProperties> factory) : base(factory) { }
     }
     
-    public partial class InitiateConflictAction : PlayerGameAction
+    public partial class InitiateConflictAction : PlayerAction
     {
         public InitiateConflictAction() : base() { }
         public InitiateConflictAction(PlayerActionProperties properties) : base(properties) { }
         public InitiateConflictAction(Func<AbilityContext, PlayerActionProperties> factory) : base(factory) { }
     }
     
-    public partial class TransferFateAction : PlayerGameAction
+    public partial class TransferFateAction : PlayerAction
     {
         public TransferFateAction() : base() { }
         public TransferFateAction(PlayerActionProperties properties) : base(properties) { }
         public TransferFateAction(Func<AbilityContext, PlayerActionProperties> factory) : base(factory) { }
     }
     
-    public partial class TransferHonorAction : PlayerGameAction
+    public partial class TransferHonorAction : PlayerAction
     {
         public TransferHonorAction() : base() { }
         public TransferHonorAction(PlayerActionProperties properties) : base(properties) { }
         public TransferHonorAction(Func<AbilityContext, PlayerActionProperties> factory) : base(factory) { }
     }
     
-    public partial class ChosenDiscardAction : PlayerGameAction
+    public partial class ChosenDiscardAction : PlayerAction
     {
         public ChosenDiscardAction() : base() { }
         public ChosenDiscardAction(PlayerActionProperties properties) : base(properties) { }
         public ChosenDiscardAction(Func<AbilityContext, PlayerActionProperties> factory) : base(factory) { }
     }
     
-    public partial class RandomDiscardAction : PlayerGameAction
+    public partial class RandomDiscardAction : PlayerAction
     {
         public RandomDiscardAction() : base() { }
         public RandomDiscardAction(PlayerActionProperties properties) : base(properties) { }
         public RandomDiscardAction(Func<AbilityContext, PlayerActionProperties> factory) : base(factory) { }
     }
     
-    public partial class DeckSearchAction : PlayerGameAction
+    public partial class DeckSearchAction : PlayerAction
     {
         public DeckSearchAction() : base() { }
         public DeckSearchAction(PlayerActionProperties properties) : base(properties) { }
         public DeckSearchAction(Func<AbilityContext, PlayerActionProperties> factory) : base(factory) { }
     }
     
-    public partial class ShuffleDeckAction : PlayerGameAction
+    public partial class ShuffleDeckAction : PlayerAction
     {
         public ShuffleDeckAction() : base() { }
         public ShuffleDeckAction(PlayerActionProperties properties) : base(properties) { }
         public ShuffleDeckAction(Func<AbilityContext, PlayerActionProperties> factory) : base(factory) { }
     }
     
-    public partial class RefillFaceupAction : PlayerGameAction
+    public partial class RefillFaceupAction : PlayerAction
     {
         public RefillFaceupAction() : base() { }
         public RefillFaceupAction(PlayerActionProperties properties) : base(properties) { }
         public RefillFaceupAction(Func<AbilityContext, PlayerActionProperties> factory) : base(factory) { }
     }
     
-    public partial class DiscardFavorAction : PlayerGameAction
+    public partial class DiscardFavorAction : PlayerAction
     {
         public DiscardFavorAction() : base() { }
         public DiscardFavorAction(PlayerActionProperties properties) : base(properties) { }

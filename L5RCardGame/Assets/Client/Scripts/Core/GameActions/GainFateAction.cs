@@ -8,7 +8,7 @@ namespace L5RGame
     /// Player gains fate
     /// </summary>
     [System.Serializable]
-    public class GainFateAction : PlayerAction
+    public partial class GainFateAction : PlayerAction
     {
         /// <summary>
         /// Properties specific to gaining fate

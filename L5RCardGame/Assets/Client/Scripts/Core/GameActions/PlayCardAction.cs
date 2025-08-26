@@ -69,7 +69,7 @@ namespace L5RGame
         public Locations Location { get; set; }
     }
 
-    public class PlayCardAction : CardGameAction
+    public partial class PlayCardAction : CardGameAction
     {
         public override string Name => "playCard";
         public override string Effect => "play {0} as if it were in their hand";

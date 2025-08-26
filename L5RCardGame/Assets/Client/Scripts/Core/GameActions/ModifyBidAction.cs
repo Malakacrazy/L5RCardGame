@@ -24,7 +24,7 @@ namespace L5RGame
         public Direction Direction { get; set; }
     }
 
-    public class ModifyBidAction : PlayerAction
+    public partial class ModifyBidAction : PlayerAction
     {
         public override string Name => "modifyBid";
         public override string EventName => EventNames.OnModifyBid;

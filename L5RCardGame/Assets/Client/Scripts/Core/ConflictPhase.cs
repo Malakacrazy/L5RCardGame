@@ -495,40 +495,40 @@ namespace L5RGame
     }
 
     // Simple step implementation for the game pipeline
-    public class SimpleStep : IGameStep
+    public partial class SimpleStep : IGameStep
     {
         private Game game;
         private System.Action action;
+        private string stepName;
 
         public SimpleStep(Game game, System.Action action)
         {
             this.game = game;
             this.action = action;
+            this.stepName = "SimpleStep";
         }
 
-        public void Execute()
+        public bool Execute()
         {
             action?.Invoke();
-        }
-
-        public bool IsComplete()
-        {
             return true; // Simple steps complete immediately
         }
 
-        public void Skip()
-        {
-            // Simple steps cannot be skipped
-        }
+        public bool IsComplete => true;
+        public bool CanCancel => false;
+        public string StepName => stepName;
 
-        public void Cleanup()
-        {
-            // No cleanup needed for simple steps
-        }
+        public void Continue() { }
+        public void CancelStep() { }
+        public void QueueStep(IGameStep step) { game.pipeline.QueueStep(step); }
+        public void OnCardClicked(Player player, BaseCard card) { }
+        public void OnRingClicked(Player player, Ring ring) { }
+        public void OnMenuCommand(Player player, string command, string arg1, string arg2) { }
+        public string GetDebugInfo() => $"SimpleStep: {stepName}";
     }
 
     // Action window for player actions during the phase
-    public class ActionWindow : IGameStep
+    public partial class ActionWindow : IGameStep
     {
         private Game game;
         private string windowName;
@@ -542,25 +542,23 @@ namespace L5RGame
             this.windowType = windowType;
         }
 
-        public void Execute()
+        public bool Execute()
         {
             game.OpenActionWindow(windowName, windowType, () => isComplete = true);
+            return false; // Action windows pause execution until complete
         }
 
-        public bool IsComplete()
-        {
-            return isComplete;
-        }
+        public bool IsComplete => isComplete;
+        public bool CanCancel => true;
+        public string StepName => $"ActionWindow: {windowName}";
 
-        public void Skip()
-        {
-            isComplete = true;
-        }
-
-        public void Cleanup()
-        {
-            // Cleanup handled by game's action window system
-        }
+        public void Continue() { }
+        public void CancelStep() { isComplete = true; }
+        public void QueueStep(IGameStep step) { game.pipeline.QueueStep(step); }
+        public void OnCardClicked(Player player, BaseCard card) { }
+        public void OnRingClicked(Player player, Ring ring) { }
+        public void OnMenuCommand(Player player, string command, string arg1, string arg2) { }
+        public string GetDebugInfo() => $"ActionWindow: {windowName} ({windowType}) - Complete: {isComplete}";
     }
     #endregion
 }

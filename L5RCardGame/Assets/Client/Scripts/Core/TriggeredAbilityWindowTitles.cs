@@ -729,16 +729,5 @@ namespace L5RGame
         List<object> GetEvents();
     }
 
-    /// <summary>
-    /// Enhanced game event interface with additional properties
-    /// </summary>
-    public interface IGameEvent
-    {
-        string Name { get; }
-        BaseCard Card { get; }
-        Ring Ring { get; }
-        string Phase { get; }
-        AbilityContext Context { get; }
-        bool cancelled { get; set; }
-    }
+
 }

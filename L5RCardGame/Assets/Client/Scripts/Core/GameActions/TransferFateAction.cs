@@ -13,7 +13,7 @@ namespace L5RGame
         public int Amount { get; set; }
     }
 
-    public class TransferFateAction : PlayerAction
+    public partial class TransferFateAction : PlayerAction
     {
         public override string Name => "takeFate";
         public override string EventName => EventNames.OnMoveFate;

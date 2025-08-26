@@ -8,7 +8,7 @@ namespace L5RGame
     /// Player loses honor
     /// </summary>
     [System.Serializable]
-    public class LoseHonorAction : PlayerAction
+    public partial class LoseHonorAction : PlayerAction
     {
         /// <summary>
         /// Properties specific to losing honor

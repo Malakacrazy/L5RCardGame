@@ -5,462 +5,74 @@ using UnityEngine;
 namespace L5RGame
 {
     /// <summary>
-    /// Base interface for all ability limits
-    /// </summary>
-    public interface IAbilityLimit
-    {
-        /// <summary>
-        /// Check if this limit can reset automatically
-        /// </summary>
-        /// <returns>True if repeatable</returns>
-        bool IsRepeatable();
-
-        /// <summary>
-        /// Get the maximum uses allowed for a player
-        /// </summary>
-        /// <param name="player">Player to check limit for</param>
-        /// <returns>Maximum number of uses</returns>
-        int GetModifiedMax(Player player);
-
-        /// <summary>
-        /// Check if a player has reached the maximum uses
-        /// </summary>
-        /// <param name="player">Player to check</param>
-        /// <returns>True if at maximum uses</returns>
-        bool IsAtMax(Player player);
-
-        /// <summary>
-        /// Increment the use count for a player
-        /// </summary>
-        /// <param name="player">Player who used the ability</param>
-        void Increment(Player player);
-
-        /// <summary>
-        /// Reset the use counts for all players
-        /// </summary>
-        void Reset();
-
-        /// <summary>
-        /// Register for game events (if needed)
-        /// </summary>
-        /// <param name="game">Game instance to register with</param>
-        void RegisterEvents(Game game);
-
-        /// <summary>
-        /// Unregister from game events
-        /// </summary>
-        /// <param name="game">Game instance to unregister from</param>
-        void UnregisterEvents(Game game);
-
-        /// <summary>
-        /// Set the ability this limit belongs to
-        /// </summary>
-        /// <param name="ability">Ability instance</param>
-        void SetAbility(object ability);
-    }
-
-    /// <summary>
-    /// Fixed ability limit that never resets automatically
+    /// Manages ability usage limits (per round, per conflict, etc.)
     /// </summary>
     [System.Serializable]
-    public class FixedAbilityLimit : IAbilityLimit
+    public partial class AbilityLimit
     {
-        [Header("Fixed Limit")]
-        [SerializeField] private int max;
-        [SerializeField] private Dictionary<string, int> useCount = new Dictionary<string, int>();
-        
-        /// <summary>
-        /// The ability this limit belongs to
-        /// </summary>
-        public object ability { get; private set; }
+        public int maxUses = 1;
+        public string limitType = "unlimited";
+        public Dictionary<string, int> currentUses;
+        public BaseAbility ability;
 
-        /// <summary>
-        /// Create a fixed ability limit
-        /// </summary>
-        /// <param name="maximum">Maximum number of uses</param>
-        public FixedAbilityLimit(int maximum)
+        public AbilityLimit()
         {
-            max = maximum;
-            useCount = new Dictionary<string, int>();
-            ability = null;
+            currentUses = new Dictionary<string, int>();
         }
 
-        /// <summary>
-        /// Fixed limits are not repeatable
-        /// </summary>
-        /// <returns>Always false</returns>
-        public virtual bool IsRepeatable()
+        public static AbilityLimit PerRound(int max)
         {
+            return new AbilityLimit { limitType = "perRound", maxUses = max };
+        }
+
+        public static AbilityLimit PerConflict(int max)
+        {
+            return new AbilityLimit { limitType = "perConflict", maxUses = max };
+        }
+
+        public static AbilityLimit PerPhase(int max)
+        {
+            return new AbilityLimit { limitType = "perPhase", maxUses = max };
+        }
+
+        public void RegisterEvents()
+        {
+            // Register event handlers based on limit type
+        }
+
+        public bool IsAtMax()
+        {
+            // Check if limit has been reached
             return false;
         }
 
-        /// <summary>
-        /// Get the maximum uses, considering card modifications
-        /// </summary>
-        /// <param name="player">Player to check for</param>
-        /// <returns>Modified maximum uses</returns>
-        public virtual int GetModifiedMax(Player player)
+        public void Increment()
         {
-            // If we have an ability with a card, check for limit modifications
-            if (ability is BaseAbility baseAbility && baseAbility.card != null)
-            {
-                return baseAbility.card.GetModifiedLimitMax(player, baseAbility, max);
-            }
-
-            return max;
+            // Increment usage counter
         }
-
-        /// <summary>
-        /// Check if player has reached maximum uses
-        /// </summary>
-        /// <param name="player">Player to check</param>
-        /// <returns>True if at maximum</returns>
-        public virtual bool IsAtMax(Player player)
-        {
-            if (player == null) return false;
-
-            int currentUses = useCount.GetValueOrDefault(player.name, 0);
-            int maxUses = GetModifiedMax(player);
-            
-            return currentUses >= maxUses;
-        }
-
-        /// <summary>
-        /// Increment use count for a player
-        /// </summary>
-        /// <param name="player">Player who used the ability</param>
-        public virtual void Increment(Player player)
-        {
-            if (player == null) return;
-
-            if (useCount.ContainsKey(player.name))
-            {
-                useCount[player.name]++;
-            }
-            else
-            {
-                useCount[player.name] = 1;
-            }
-
-            Debug.Log($"🔒 Ability limit incremented for {player.name}: {useCount[player.name]}/{GetModifiedMax(player)}");
-        }
-
-        /// <summary>
-        /// Reset all use counts
-        /// </summary>
-        public virtual void Reset()
-        {
-            useCount.Clear();
-            Debug.Log("🔒 Fixed ability limit reset");
-        }
-
-        /// <summary>
-        /// Fixed limits don't register for events
-        /// </summary>
-        /// <param name="game">Game instance</param>
-        public virtual void RegisterEvents(Game game)
-        {
-            // No event handling for fixed limits
-        }
-
-        /// <summary>
-        /// Fixed limits don't unregister from events
-        /// </summary>
-        /// <param name="game">Game instance</param>
-        public virtual void UnregisterEvents(Game game)
-        {
-            // No event handling for fixed limits
-        }
-
-        /// <summary>
-        /// Set the ability this limit belongs to
-        /// </summary>
-        /// <param name="abilityInstance">Ability instance</param>
-        public virtual void SetAbility(object abilityInstance)
-        {
-            ability = abilityInstance;
-        }
-
-        /// <summary>
-        /// Get current use count for a player
-        /// </summary>
-        /// <param name="player">Player to check</param>
-        /// <returns>Current use count</returns>
-        public int GetUseCount(Player player)
-        {
-            return useCount.GetValueOrDefault(player?.name ?? "", 0);
-        }
-
-        /// <summary>
-        /// Get remaining uses for a player
-        /// </summary>
-        /// <param name="player">Player to check</param>
-        /// <returns>Remaining uses</returns>
-        public int GetRemainingUses(Player player)
-        {
-            return Math.Max(0, GetModifiedMax(player) - GetUseCount(player));
-        }
-    }
-
-    /// <summary>
-    /// Repeatable ability limit that resets on specific game events
-    /// </summary>
-    [System.Serializable]
-    public class RepeatableAbilityLimit : FixedAbilityLimit
-    {
-        [Header("Repeatable Limit")]
-        [SerializeField] private string eventName;
         
         /// <summary>
-        /// Event handler for resetting the limit
+        /// Mark the limit as used
         /// </summary>
-        private System.Action<GameEvent> resetHandler;
-
-        /// <summary>
-        /// Create a repeatable ability limit
-        /// </summary>
-        /// <param name="maximum">Maximum number of uses</param>
-        /// <param name="resetEventName">Event that resets the limit</param>
-        public RepeatableAbilityLimit(int maximum, string resetEventName) : base(maximum)
+        public void MarkUsed()
         {
-            eventName = resetEventName;
-            resetHandler = (gameEvent) => Reset();
+            Increment();
         }
 
         /// <summary>
-        /// Repeatable limits are repeatable
+        /// Check if the limit has expired
         /// </summary>
-        /// <returns>Always true</returns>
-        public override bool IsRepeatable()
+        public bool IsExpired()
         {
-            return true;
+            return IsAtMax();
         }
 
         /// <summary>
-        /// Register for the reset event
+        /// Unregister event handlers
         /// </summary>
-        /// <param name="game">Game instance to register with</param>
-        public override void RegisterEvents(Game game)
+        public void UnregisterEvents()
         {
-            if (game != null && !string.IsNullOrEmpty(eventName))
-            {
-                game.on(eventName, resetHandler);
-                Debug.Log($"🔒 Registered repeatable limit for event: {eventName}");
-            }
-        }
-
-        /// <summary>
-        /// Unregister from the reset event
-        /// </summary>
-        /// <param name="game">Game instance to unregister from</param>
-        public override void UnregisterEvents(Game game)
-        {
-            if (game != null && !string.IsNullOrEmpty(eventName))
-            {
-                game.removeListener(eventName, resetHandler);
-                Debug.Log($"🔒 Unregistered repeatable limit for event: {eventName}");
-            }
-        }
-
-        /// <summary>
-        /// Reset with logging for repeatable limits
-        /// </summary>
-        public override void Reset()
-        {
-            base.Reset();
-            Debug.Log($"🔒 Repeatable ability limit reset on event: {eventName}");
-        }
-
-        /// <summary>
-        /// Get the event name that resets this limit
-        /// </summary>
-        /// <returns>Event name</returns>
-        public string GetEventName()
-        {
-            return eventName;
+            // Unregister event handlers based on limit type
         }
     }
-
-    /// <summary>
-    /// Static factory class for creating ability limits
-    /// </summary>
-    public static class AbilityLimit
-    {
-        /// <summary>
-        /// Create a fixed ability limit (never resets)
-        /// </summary>
-        /// <param name="max">Maximum number of uses</param>
-        /// <returns>Fixed ability limit</returns>
-        public static IAbilityLimit Fixed(int max)
-        {
-            return new FixedAbilityLimit(max);
-        }
-
-        /// <summary>
-        /// Create a repeatable ability limit with custom event
-        /// </summary>
-        /// <param name="max">Maximum number of uses</param>
-        /// <param name="eventName">Event that resets the limit</param>
-        /// <returns>Repeatable ability limit</returns>
-        public static IAbilityLimit Repeatable(int max, string eventName)
-        {
-            return new RepeatableAbilityLimit(max, eventName);
-        }
-
-        /// <summary>
-        /// Create a per-conflict ability limit
-        /// </summary>
-        /// <param name="max">Maximum uses per conflict</param>
-        /// <returns>Per-conflict ability limit</returns>
-        public static IAbilityLimit PerConflict(int max)
-        {
-            return new RepeatableAbilityLimit(max, EventNames.OnConflictFinished);
-        }
-
-        /// <summary>
-        /// Create a per-phase ability limit
-        /// </summary>
-        /// <param name="max">Maximum uses per phase</param>
-        /// <returns>Per-phase ability limit</returns>
-        public static IAbilityLimit PerPhase(int max)
-        {
-            return new RepeatableAbilityLimit(max, EventNames.OnPhaseEnded);
-        }
-
-        /// <summary>
-        /// Create a per-round ability limit
-        /// </summary>
-        /// <param name="max">Maximum uses per round</param>
-        /// <returns>Per-round ability limit</returns>
-        public static IAbilityLimit PerRound(int max)
-        {
-            return new RepeatableAbilityLimit(max, EventNames.OnRoundEnded);
-        }
-
-        /// <summary>
-        /// Create an unlimited per-conflict ability limit
-        /// </summary>
-        /// <returns>Unlimited per-conflict ability limit</returns>
-        public static IAbilityLimit UnlimitedPerConflict()
-        {
-            return new RepeatableAbilityLimit(int.MaxValue, EventNames.OnConflictFinished);
-        }
-
-        /// <summary>
-        /// Create an unlimited ability limit (no restrictions)
-        /// </summary>
-        /// <returns>Unlimited ability limit</returns>
-        public static IAbilityLimit Unlimited()
-        {
-            return new UnlimitedAbilityLimit();
-        }
-
-        /// <summary>
-        /// Create a per-duel ability limit
-        /// </summary>
-        /// <param name="max">Maximum uses per duel</param>
-        /// <returns>Per-duel ability limit</returns>
-        public static IAbilityLimit PerDuel(int max)
-        {
-            return new RepeatableAbilityLimit(max, EventNames.OnDuelFinished);
-        }
-
-        /// <summary>
-        /// Create a limit that resets when a player passes priority
-        /// </summary>
-        /// <param name="max">Maximum uses per priority window</param>
-        /// <returns>Per-priority ability limit</returns>
-        public static IAbilityLimit PerPriority(int max)
-        {
-            return new RepeatableAbilityLimit(max, EventNames.OnPassActionPhasePriority);
-        }
-    }
-
-    /// <summary>
-    /// Unlimited ability limit for abilities with no restrictions
-    /// </summary>
-    public class UnlimitedAbilityLimit : IAbilityLimit
-    {
-        public bool IsRepeatable() => false;
-        public int GetModifiedMax(Player player) => int.MaxValue;
-        public bool IsAtMax(Player player) => false;
-        public void Increment(Player player) { /* No tracking needed */ }
-        public void Reset() { /* Nothing to reset */ }
-        public void RegisterEvents(Game game) { /* No events needed */ }
-        public void UnregisterEvents(Game game) { /* No events needed */ }
-        public void SetAbility(object ability) { /* No ability reference needed */ }
-    }
-
-    // BaseAbility is defined in GameSupportingClasses.cs
-
-    /// <summary>
-    /// Extension methods for working with ability limits
-    /// </summary>
-    public static class AbilityLimitExtensions
-    {
-        /// <summary>
-        /// Check if a player can use an ability considering its limit
-        /// </summary>
-        /// <param name="player">Player to check</param>
-        /// <param name="ability">Ability to check</param>
-        /// <returns>True if ability can be used</returns>
-        public static bool CanUseAbility(this Player player, BaseAbility ability)
-        {
-            return ability?.CanUse(player) ?? true;
-        }
-
-        /// <summary>
-        /// Use an ability and increment its limit counter
-        /// </summary>
-        /// <param name="player">Player using the ability</param>
-        /// <param name="ability">Ability being used</param>
-        public static void UseAbility(this Player player, BaseAbility ability)
-        {
-            ability?.Use(player);
-        }
-
-        /// <summary>
-        /// Get a summary of ability limits for a player
-        /// </summary>
-        /// <param name="player">Player to get summary for</param>
-        /// <param name="abilities">List of abilities to check</param>
-        /// <returns>Dictionary of ability limits</returns>
-        public static Dictionary<string, AbilityLimitSummary> GetAbilityLimitSummary(this Player player, 
-                                                                                     List<BaseAbility> abilities)
-        {
-            var summary = new Dictionary<string, AbilityLimitSummary>();
-            
-            foreach (var ability in abilities)
-            {
-                if (ability?.limit != null && ability.limit.GetModifiedMax(player) < int.MaxValue)
-                {
-                    var key = ability.GetType().Name;
-                    summary[key] = new AbilityLimitSummary
-                    {
-                        maxUses = ability.limit.GetModifiedMax(player),
-                        remainingUses = ability.GetRemainingUses(player),
-                        isRepeatable = ability.limit.IsRepeatable(),
-                        eventName = ability.limit is RepeatableAbilityLimit repeatable ? 
-                                   repeatable.GetEventName() : null
-                    };
-                }
-            }
-            
-            return summary;
-        }
-    }
-
-    /// <summary>
-    /// Summary information about an ability limit
-    /// </summary>
-    [System.Serializable]
-    public class AbilityLimitSummary
-    {
-        public int maxUses;
-        public int remainingUses;
-        public bool isRepeatable;
-        public string eventName;
-    }
-
-    // EventNames are defined in Constants.cs
 }

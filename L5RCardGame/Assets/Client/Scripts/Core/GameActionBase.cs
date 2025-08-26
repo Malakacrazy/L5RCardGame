@@ -106,7 +106,7 @@ namespace L5RGame
     /// Base class for all game actions
     /// </summary>
     [Serializable]
-    public abstract class GameAction
+    public abstract partial class GameAction
     {
         [Header("Game Action Configuration")]
         [SerializeField] protected string actionName = "";
@@ -218,7 +218,7 @@ namespace L5RGame
     /// Base class for card-targeting game actions
     /// </summary>
     [Serializable]
-    public abstract class CardGameAction : GameAction
+    public abstract partial class CardGameAction : GameAction
     {
         public override string[] TargetType => new string[] { "card" };
 

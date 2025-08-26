@@ -8,7 +8,7 @@ namespace L5RGame
     /// Player draws cards from their deck
     /// </summary>
     [System.Serializable]
-    public class DrawAction : PlayerAction
+    public partial class DrawAction : PlayerAction
     {
         /// <summary>
         /// Properties specific to drawing cards

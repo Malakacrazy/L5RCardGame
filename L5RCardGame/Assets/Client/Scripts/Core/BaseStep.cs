@@ -8,7 +8,7 @@ namespace L5RGame
     /// Provides common functionality for handling user interactions and step progression.
     /// </summary>
     [System.Serializable]
-    public abstract class BaseStep : IGameStep
+    public abstract partial class BaseStep : IGameStep
     {
         [Header("Base Step Configuration")]
         [SerializeField] protected Game game;
@@ -233,9 +233,10 @@ namespace L5RGame
         /// </summary>
         /// <param name="player">Player who issued the command</param>
         /// <param name="command">Command that was issued</param>
-        /// <param name="args">Additional command arguments</param>
+        /// <param name="arg1">First argument</param>
+        /// <param name="arg2">Second argument</param>
         /// <returns>True if the command was handled</returns>
-        public virtual bool OnMenuCommand(Player player, string command, object[] args = null)
+        public virtual bool OnMenuCommand(Player player, string command, string arg1, string arg2)
         {
             // Default implementation - no handling
             return false;
@@ -624,7 +625,7 @@ namespace L5RGame
     /// <summary>
     /// Simple step implementation for quick one-off steps
     /// </summary>
-    public class SimpleStep : BaseStep
+    public partial class SimpleStep : BaseStep
     {
         private readonly System.Func<bool> stepFunction;
         private readonly string customName;

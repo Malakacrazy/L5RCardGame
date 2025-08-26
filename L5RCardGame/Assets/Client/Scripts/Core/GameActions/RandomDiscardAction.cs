@@ -9,7 +9,7 @@ namespace L5RGame
     /// Player discards cards at random from hand
     /// </summary>
     [System.Serializable]
-    public class RandomDiscardAction : PlayerAction
+    public partial class RandomDiscardAction : PlayerAction
     {
         /// <summary>
         /// Properties specific to random discard

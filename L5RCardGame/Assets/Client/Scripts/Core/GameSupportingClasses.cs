@@ -8,10 +8,10 @@ namespace L5RGame
     /// Manages ability usage limits (per round, per conflict, etc.)
     /// </summary>
     [Serializable]
-    public class AbilityLimit
+    public partial class AbilityLimit
     {
-        public int maxUses;
-        public string limitType;
+        public int maxUses = 1;
+        public string limitType = "unlimited";
         public Dictionary<string, int> currentUses;
         public BaseAbility ability;
 
@@ -56,10 +56,10 @@ namespace L5RGame
     /// Base class for all abilities
     /// </summary>
     [Serializable]
-    public abstract class BaseAbility
+    public abstract partial class BaseAbility
     {
-        public string id;
-        public string title;
+        public string id = "";
+        public string title = "";
         public AbilityLimit limit;
         public List<ICost> cost = new List<ICost>();
 
@@ -159,7 +159,7 @@ namespace L5RGame
     /// Simple step implementation
     /// </summary>
     [Serializable]
-    public class SimpleStep : IGameStep
+    public partial class SimpleStep
     {
         protected string name;
         protected System.Action executeAction;
@@ -222,7 +222,7 @@ namespace L5RGame
     /// Base step implementation
     /// </summary>
     [Serializable]
-    public abstract class BaseStep : IGameStep
+    public abstract partial class BaseStep
     {
         protected string stepName;
         protected bool isComplete;

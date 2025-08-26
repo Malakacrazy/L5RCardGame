@@ -15,7 +15,7 @@ namespace L5RGame
         public bool AfterBid { get; set; }
     }
 
-    public class TransferHonorAction : PlayerAction
+    public partial class TransferHonorAction : PlayerAction
     {
         public override string Name => "takeHonor";
         public override string EventName => EventNames.OnTransferHonor;
